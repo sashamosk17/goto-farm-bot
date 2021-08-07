@@ -1,3 +1,3 @@
 
 def process_message(message, user, bot):
-    bot.send_message(user['id'], "Вы на ферме")
+    bot.send_message(user['id'], "Вы на ферме!")
