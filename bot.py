@@ -1,6 +1,7 @@
 from config import TOKEN
 from telebot import TeleBot
 from locations import farm, shop, square
+from random import randint
 
 bot = TeleBot(TOKEN)
 
