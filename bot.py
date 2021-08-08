@@ -21,7 +21,6 @@ def process(message):
         users[user_id] = {}
         #Тут расширяем словарь
         users[user_id]['id'] = user_id
-        users[user_id]['balance'] = 0
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         return
     

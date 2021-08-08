@@ -2,6 +2,8 @@ from bot import bot
 from datetime import datetime, timezone, timedelta
 from bot import location_manages
 from bot import users
+
+
 def welcome(user, bot):
     bot.send_message(user['id'],
                      "Вы на ферме! Здесь можно выращивать овощи а огороде, собирать цветы в саду, и разводить скот в загонах для последущей продажи в магазине(/goto shop). Внимание! Собирайте вовремя урожай, иначе он сгниет, и вы потеряете готубли.\n"
@@ -27,6 +29,8 @@ def process(message):
         location = user['location']
         manager = location_manages[location]
         manager.process_message(message, user, bot)
+
+
 def process_message(message, user, bot):
     pass
 
