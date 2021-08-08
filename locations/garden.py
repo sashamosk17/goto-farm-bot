@@ -1,6 +1,6 @@
 from bot import bot
 from helpers import generate_keyboard
-from bot import users[user.id]
+from bot import users
 from datetime import datetime, timezone, timedelta
 def welcome(user, bot):
     bot.send_message(user['id'],
@@ -9,7 +9,7 @@ def welcome(user, bot):
                      "Чтобы засадить грядки введите /plant")
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
-users[user.id]["field"] = 0
+users[user_id]["field"] = 0
 bed = 1
 height = 10
 width = bed
@@ -41,7 +41,7 @@ def plants(user,bot):
     users[user.id]["field"]= 0
 
 @bot.message_handler(commands=["field"])
-def field():
+def field(user, bot):
     if users[user.id]["field"] == 0:
         bot.send_message(user['id'], "Ваше поле пустое")
     else:
