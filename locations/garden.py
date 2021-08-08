@@ -45,3 +45,4 @@ def field():
     if users[user.id]["field"] == 0:
         bot.send_message(user['id'], "Ваше поле пустое")
     else:
+        pass
