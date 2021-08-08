@@ -1,7 +1,6 @@
 from config import TOKEN
 from telebot import TeleBot
-from locations import farm, shop, square
-
+from locations import farm, shop, square, garden, flowers, animals
 bot = TeleBot(TOKEN)
 
 users = {}
@@ -9,7 +8,10 @@ users = {}
 location_manages = {
     "farm": farm,
     "square": square,
-    "shop": shop
+    "shop": shop,
+    "garden": garden,
+    "flowers": flowers,
+    "animals": animals
 }
 
 @bot.message_handler(content_types='text')
@@ -19,6 +21,7 @@ def process(message):
         users[user_id] = {}
         #Тут расширяем словарь
         users[user_id]['id'] = user_id
+        users[user_id]['balance'] = 0
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         return
     
