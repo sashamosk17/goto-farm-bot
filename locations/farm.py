@@ -1,5 +1,5 @@
-from bot import bot
 from datetime import datetime, timezone, timedelta
+
 
 def welcome(user, bot):
     bot.send_message(user['id'],
@@ -9,7 +9,7 @@ def welcome(user, bot):
                      "загон - /goto paddock \n")
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
+
+
 def process_message(message, user, bot):
     pass
-
-
