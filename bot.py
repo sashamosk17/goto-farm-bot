@@ -1,7 +1,6 @@
 from config import TOKEN
 from telebot import TeleBot
 from locations import farm, shop, square
-from random import randint
 
 bot = TeleBot(TOKEN)
 
@@ -24,19 +23,22 @@ def process(message):
         users[user_id]['balance'] = 0
         bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
-    
+
     user = users[user_id]
-    
+
     if "farm_name" not in user:
         user['farm_name'] = message.text
         user['location'] = 'farm'
         bot.send_message(user_id, "История")
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
-        if location not in [location_manages.keys()]:
+        print(location_manages.keys())
+        print(list(location_manages.keys()))
+        if location not in list(location_manages.keys()):
             bot.send_message(user['id'], "Нет такой локации")
         else:
-            # bot.send_message(user['id'], "Теперь вы в {}".format(location))
+            #bot.send_message(user['id'], "hi")
+            #bot.send_message(user['id'], "Теперь вы в {}".format(location))
             user['location'] = location
             manager = location_manages[location]
             manager.process_message(message.text, user, bot)
