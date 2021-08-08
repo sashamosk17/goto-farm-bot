@@ -13,14 +13,16 @@ location_manages = {
     "shop": shop
 }
 
+
 @bot.message_handler(content_types='text')
 def process(message):
     user_id = message.chat.id
     if user_id not in users:
         users[user_id] = {}
-        #Тут расширяем словарь
+        # Тут расширяем словарь
         users[user_id]['id'] = user_id
-        bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
+        users[user_id]['balance'] = 0
+        bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
     
     user = users[user_id]
@@ -37,10 +39,11 @@ def process(message):
             # bot.send_message(user['id'], "Теперь вы в {}".format(location))
             user['location'] = location
             manager = location_manages[location]
-            manager.welcome(user, bot)
+            manager.process_message(message.text, user, bot)
     else:
         location = user['location']
         manager = location_manages[location]
         manager.process_message(message, user, bot)
+
 
 bot.polling(none_stop=True)

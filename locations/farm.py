@@ -1,4 +1,3 @@
-from bot import bot
 from datetime import datetime, timezone, timedelta
 
 def welcome(user, bot):
@@ -11,4 +10,5 @@ def welcome(user, bot):
     hour = current_time.hour
 def process_message(message, user, bot):
     pass
+
 
