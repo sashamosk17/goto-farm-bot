@@ -31,7 +31,6 @@ def process(message):
         bot.send_message(user_id, "История")
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
-
         if location not in [location_manages.keys()]:
             bot.send_message(user['id'], "Нет такой локации")
         else:
