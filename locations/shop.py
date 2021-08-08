@@ -4,9 +4,14 @@ from helpers import generate_keyboard
 def welcome(user, bot):
     pass
 
-def process_message(message, user, bot):
-    buttons = ["Полочка 'Всё для животных'", "Полочка 'Всё для растений'", "В углу стоит подозрительный гном", "Дверь. Ведёт в подвал. Наверное..."]
+def send_menu(chat_id, bot):
+    buttons = ["Полочка 'Всё для животных'", "Полочка 'Всё для растений'", "В углу стоит подозрительный гном",
+               "Дверь. Ведёт в подвал. Наверное..."]
     keyboard = generate_keyboard(buttons)
+    bot.send_message(chat_id, "Чего хотите?", reply_markup=keyboard)
+
+def process_message(message, user, bot):
+    send_menu(user['id'], bot)
 
     if message == "Полочка 'Всё для животных'":
         pass
