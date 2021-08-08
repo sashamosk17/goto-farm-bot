@@ -30,7 +30,7 @@ def process(message):
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
 
-        if location not in ["farm", "shop", "square"]:
+        if location not in [location_manages.keys()]:
             bot.send_message(user['id'], "Нет такой локации")
         else:
             # bot.send_message(user['id'], "Теперь вы в {}".format(location))
