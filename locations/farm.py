@@ -15,6 +15,6 @@ def repeat_all_messages(message):
 @bot.message_handler(commands=["flowers"])
 def repeat_all_messages(message):
     pass
-@bot.message_handler(commands=["paddock"])
+@bot.message_handler(commands=["animals"])
 def repeat_all_messages(message):
     pass

@@ -18,7 +18,7 @@ def process(message):
     if user_id not in users:
         users[user_id] = {}
         users[user_id]['id'] = user_id
-        bot.send_message(user_id, "Привет! Укажи название фермы.")
+        bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         return
     
     user = users[user_id]
