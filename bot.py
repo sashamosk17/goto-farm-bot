@@ -15,11 +15,12 @@ location_manages = {
 
 @bot.message_handler(content_types='text')
 def process(message):
+    message.chat.id
     user_id = message.chat.id
     if user_id not in users:
         users[user_id] = {}
         users[user_id]['id'] = user_id
-        bot.send_message(user_id, "Привет! Укажи название фермы.")
+        bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         return
     
     user = users[user_id]
@@ -40,6 +41,5 @@ def process(message):
         location = user['location']
         manager = location_manages[location]
         manager.process_message(message, user, bot)
-
 
 bot.polling(none_stop=True)
