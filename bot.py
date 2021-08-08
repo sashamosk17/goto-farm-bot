@@ -33,8 +33,10 @@ def process(message):
         if location not in ["farm", "shop", "square"]:
             bot.send_message(user['id'], "Нет такой локации")
         else:
-            bot.send_message(user['id'], "Теперь вы в {}".format(location))
+            # bot.send_message(user['id'], "Теперь вы в {}".format(location))
             user['location'] = location
+            manager = location_manages[location]
+            manager.welcome(user, bot)
     else:
         location = user['location']
         manager = location_manages[location]
