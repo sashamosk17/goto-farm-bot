@@ -1,5 +1,8 @@
 from random import randint
 
+def welcome(user, bot):
+    pass
+
 def process_message(message, user, bot):
 #    bot.send_message(user['id'], "Вы на площади")
 
@@ -24,3 +27,5 @@ def get_question():
         4: '',
         5: ''
     }
+
+

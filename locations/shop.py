@@ -1,10 +1,18 @@
 from telebot import types
+from bot import bot
+from helpers import generate_keyboard
+
+def welcome(user, bot):
+    pass
+
+def process_message(message, user):
+    buttons = ["Полочка 'Всё для животных'", "Полочка 'Всё для растений'", "В углу стоит подозрительный гном", "Дверь. Ведёт в подвал. Наверное..."]
+    keyboard = generate_keyboard(buttons)
+
+    if message.text == "Полочка 'Всё для животных'":
+        pass
 
 
-def process_message(message, user, bot):
-    bot.send_message(user['id'], "Вы в магазине")
-    keyboard = types.InlineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton(text="Полочка 'Всё для животных'", callback_data="button1")
-    button2 = types.InlineKeyboardButton(text="Полочка 'Всё для растений'", callback_data="button2")
-    keyboard.add(button1)
-    keyboard.add(button2)
+
+
+
