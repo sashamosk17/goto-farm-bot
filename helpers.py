@@ -1,4 +1,15 @@
 from telebot import types
+from locations import farm, shop, square, garden, flowers, animals
+
+location_managers = {
+    "farm": farm,
+    "square": square,
+    "shop": shop,
+    "garden": garden,
+    "flowers": flowers,
+    "animals": animals
+}
+
 
 def generate_keyboard(buttons):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -9,4 +20,7 @@ def generate_keyboard(buttons):
     return keyboard
 
 
-
+def change_location(user, location, bot, helpers):
+    user['location'] = location
+    manager = location_managers[location]
+    manager.welcome(user, bot, helpers)

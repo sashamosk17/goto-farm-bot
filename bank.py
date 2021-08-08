@@ -1,11 +1,9 @@
 import requests
-
-host = 'https://bank.goto.msk.ru'
-trading_token = '6e6f9b5a-45a0-4819-8b45-bfdb24d366c0'
+from config import BANK_HOST, TRADING_TOKEN
 
 def ask_money(from_id, amount, description):
-    answer = requests.post(host + '/api/ask', json={
-        'token': trading_token,
+    answer = requests.post(BANK_HOST + '/api/ask', json={
+        'token': TRADING_TOKEN,
         'account_id': from_id,
         'amount': amount,
         'description': description
@@ -15,7 +13,7 @@ def ask_money(from_id, amount, description):
 
 
 def verify_transaction(transaction_id, code):
-    answer = requests.post(host + '/api/verify', json={
+    answer = requests.post(BANK_HOST + '/api/verify', json={
         "transaction_id": transaction_id,
         "code": code
     })
@@ -23,8 +21,8 @@ def verify_transaction(transaction_id, code):
     return answer.json()
 
 def send_money(to_id, amount, description):
-    answer = requests.post(host + '/api/send', json={
-        'token': trading_token,
+    answer = requests.post(HOST + '/api/send', json={
+        'token': TRADING_TOKEN,
         'account_id': to_id,
         'amount': amount,
         'description': description

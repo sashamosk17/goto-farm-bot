@@ -1,18 +1,11 @@
 from config import TOKEN
 from telebot import TeleBot
-from locations import farm, shop, square, garden, flowers, animals
+import helpers
+
 bot = TeleBot(TOKEN)
 
 users = {}
 
-location_manages = {
-    "farm": farm,
-    "square": square,
-    "shop": shop,
-    "garden": garden,
-    "flowers": flowers,
-    "animals": animals
-}
 
 @bot.message_handler(content_types='text')
 def process(message):
@@ -31,19 +24,17 @@ def process(message):
         user['farm_name'] = message.text
         user['location'] = 'farm'
         bot.send_message(user_id, "История")
+        helpers.change_location(user, "farm", bot, helpers)
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
 
-        if location not in [location_manages.keys()]:
+        if location not in list(helpers.location_managers.keys()):
             bot.send_message(user['id'], "Нет такой локации")
         else:
-            # bot.send_message(user['id'], "Теперь вы в {}".format(location))
-            user['location'] = location
-            manager = location_manages[location]
-            manager.welcome(user, bot)
+            helpers.change_location(user, location, bot, helpers)
     else:
         location = user['location']
-        manager = location_manages[location]
-        manager.process_message(message, user, bot)
+        manager = helpers.location_managers[location]
+        manager.process_message(message, user, bot, helpers)
 
 bot.polling(none_stop=True)

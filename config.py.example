@@ -1,1 +1,3 @@
 TOKEN = ""
+BANK_HOST = 'https://bank.goto.msk.ru'
+TRADING_TOKEN = ''

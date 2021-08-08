@@ -1,16 +1,14 @@
 import random
 from random import randint
 from content.questions import questions
-from helpers import generate_keyboard
 
-def welcome(user, bot):
+
+def welcome(user, bot, helpers):
     bot.send_message(user['id'], "Вы на площади")
-def process_message(message, user, bot):
-#    bot.send_message(user['id'], "Вы на площади")
 
-#def process_message(message, user, bot):
-#    bot.send_message(user['id'], "Вы на площади")
 
+def process_message(message, user, bot, helpers):
+    #    bot.send_message(user['id'], "Вы на площади")
 
     if 'current_question' in user:
         if 'answer' == message.text:
@@ -22,9 +20,10 @@ def process_message(message, user, bot):
             bot.send_message(user['id'], get_anek())
         if "/question" in message.text:
             question = random.choice(questions)
-            keyboard = generate_keyboard(question["answers"])
+            keyboard = helpers.generate_keyboard(question["answers"])
             bot.send_message(user['id'], question['text'], reply_markup=keyboard)
             user['current_question'] = question
+
 
 def get_anek():
     anek = {
