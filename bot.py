@@ -15,7 +15,6 @@ location_manages = {
 
 @bot.message_handler(content_types='text')
 def process(message):
-    message.chat.id
     user_id = message.chat.id
     if user_id not in users:
         users[user_id] = {}
@@ -28,7 +27,7 @@ def process(message):
     if "farm_name" not in user:
         user['farm_name'] = message.text
         user['location'] = 'farm'
-        bot.send_message(user_id, "Тут будет история про ферму от дедушки.")
+        bot.send_message(user_id, "История")
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
 
@@ -41,5 +40,14 @@ def process(message):
         location = user['location']
         manager = location_manages[location]
         manager.process_message(message, user, bot)
+
+
+@bot.message_handler(commands=["help"])
+def repeat_all_messages(message):
+    user = message.chat.id
+    bot.send_message(user['id'], "/goto square"
+                                 "/goto shop"
+                                 "/goto farm")
+#/////////
 
 bot.polling(none_stop=True)
