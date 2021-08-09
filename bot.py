@@ -15,7 +15,7 @@ def process(message):
         users[user_id]["height"] = 10
         users[user_id]["width"] = 1
         users[user_id]["field"] = 0
-        users[user_id]['balance'] = 0
+        users[user_id]['balance'] = 100000
         users[user_id]['id'] = user_id
         bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
