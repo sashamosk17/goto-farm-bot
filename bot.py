@@ -1,10 +1,26 @@
+import json
+import time
 from config import TOKEN
 from telebot import TeleBot
+from threading import Thread
 import helpers
 
 bot = TeleBot(TOKEN)
+
 users = {}
 
+try:
+    with open('storage.json', 'r') as file:
+        users = json.load(file)
+except:
+    pass
+
+def background_events(users, bot, helpers):
+    while True:
+        for location in helpers.location_managers.values():
+            for user in users:
+                location.event(user, bot, helpers)
+        time.sleep(60)
 
 @bot.message_handler(content_types='text')
 def process(message):
@@ -55,5 +71,11 @@ def process(message):
         bot.send_message(user['id'], "У вас болгарских перцев {} ".format(user["pepper"]))
         bot.send_message(user['id'], "У вас острых перцев {} ".format(user["pepper_hot"]))
         bot.send_message(user['id'], "У вас острых грибов {} ".format(user["mushrooms"]))
+
+    with open('storage.json', 'w') as file:
+        json.dump(users, file)
+
+background_thread = Thread(target=background_events, args=(users, bot, helpers))
+background_thread.start()
 
 bot.polling(none_stop=True)

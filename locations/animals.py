@@ -1,5 +1,7 @@
 from datetime import datetime, timezone, timedelta
 
+def event(user, bot, helpers):
+    print("Event in animals")
 
 def welcome(user, bot, helpers):
     bot.send_message(user['id'],
