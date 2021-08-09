@@ -17,11 +17,11 @@ def process(message):
         users[user_id]["field"] = 0
         users[user_id]['balance'] = 0
         users[user_id]['id'] = user_id
-        bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
+        bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
     
     user = users[user_id]
-    
+
     if "farm_name" not in user:
         user['farm_name'] = message.text
         user['location'] = 'farm'

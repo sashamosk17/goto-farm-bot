@@ -10,7 +10,6 @@ location_managers = {
     "animals": animals
 }
 
-
 def generate_keyboard(buttons):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
 

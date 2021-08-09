@@ -1,7 +1,12 @@
 import bank
+from content.prices import price_list
+
 
 def welcome(user, bot, helpers):
-    bot.send_message(user['id'], "Привет! Это местный магазин. Здесь ты можешь купить животных или семена для растений, а также продать овощи или цветы со склада")
+    bot.send_message(user['id'],
+                     "Привет! Это местный магазин. Здесь ты можешь купить животных или семена для растений, а также продать овощи или цветы со склада")
+    send_menu(user['id'], bot, helpers)
+
 
 def send_menu(chat_id, bot, helpers):
     buttons = ["Полочка 'Всё для животных'", "Полочка 'Всё для растений'", "В углу стоит подозрительный гном",
@@ -9,38 +14,50 @@ def send_menu(chat_id, bot, helpers):
     keyboard = helpers.generate_keyboard(buttons)
     bot.send_message(chat_id, "Вы вошли в магазин", reply_markup=keyboard)
 
+
 def exchange(message, user, bot):
-    print('test')
-    donate_pricelist = [50, 120, 199, 400]
-    donate_offer = [1000, 3000, 5000, 15000]
-    print(str(donate_offer[0]))
-    for i in range(0, 4):
-        if "{} монет в обмен на {} готублей".format(str(donate_offer[i]), str(donate_pricelist[i])) == message.text:
-            bot.send_message(user['id'], 'Введите "/donate "НОМЕР_СЧЁТА"" без внутренних каывчек')
-            user['gived_money'] = int(message.text.split()[5])
-            user['wanted_money'] = int(message.text.split()[0])
-    if "/donate" in message.text:
-        user['nomer_shota'] = message.text.split(' ')[1]
-        donate_text = "Пользователь поукпает внутреигровую (Весёлая ферма:Возрождение) валюту за {} готублей".format(str(user['wanted_money']))
-        bank.ask_money(user['nomer_shota'], user['gived_money'], "test")
-        bot.send_message(user['id'], 'Введите "/verify_donate "КОД_ПОДТВЕРЖДЕНИЯ"" без внутренних кавычек')
-    if "/verify_donate" in message.text:
-        bank.verify_transaction(user['nomer_shota'], message.text.split[1])
-        user['balance'] += user['wanted_money']
+    for (money, price) in price_list.items():
+        if "{} монет в обмен на {} готублей".format(money, price) == message.text:
+            answer = bank.ask_money(user['id'], price, "test")
+
+            if not answer:
+                bot.send_message(user['id'], 'Ошибка взаимодействия с банком')
+            elif answer['state'] == 'error':
+                bot.send_message(user['id'], 'Банк вернул ошибку: {}'.format(answer['error']))
+            else:
+                msg = bot.send_message(user['id'], 'Пришлите код подтверждения:')
+                user['transaction_id'] = answer['transaction_id']
+                user['asked_money'] = money
+
+def verify_transaction(message, user, bot, helpers):
+    try:
+        code = int(message.text)
+        answer = bank.verify_transaction(user['transaction_id'], code)
+
+        if not answer:
+            bot.send_message(user['id'], 'Ошибка взаимодействия с банком')
+        elif answer['state'] == 'error':
+            bot.send_message(user['id'], 'Банк вернул ошибку: {}'.format(answer['error']))
+        else:
+            msg = bot.send_message(user['id'], 'Счет пополнен')
+            del user['transaction_id']
+            user['balance'] += user['asked_money']
+    except:
+        bot.send_message(user['id'], "Код подтверждения должен быть числом")
 
 def process_message(message, user, bot, helpers):
-    send_menu(user['id'], bot, helpers)
-    exchange(message, user, bot)
+    if 'transaction_id' in user:
+        verify_transaction(message, user, bot, helpers)
     if message.text == "Полочка 'Всё для животных'":
         pass
     if message.text == "Полочка 'Всё для растений'":
         pass
     if message.text == "В углу стоит подозрительный гном":
-        buttons = ["1000 монет в обмен на 50 готублей", "3000 монет в обмен на 120 готублей","5000 монет в обмен на 199 готублей","15000 монет в обмен на 400 готублей", "Назад"]
+        buttons = ["1000 монет в обмен на 50 готублей", "3000 монет в обмен на 120 готублей",
+                   "5000 монет в обмен на 199 готублей", "15000 монет в обмен на 400 готублей", "Назад"]
         keyboard = helpers.generate_keyboard(buttons)
         bot.send_message(user['id'], "Он предлагает мне мешочек с...", reply_markup=keyboard)
-        #bank.ask_money(НОМЕР СЧЕТА ПОКУПАТЕЛЯ, СУММА, 'Пользователь обменивает готубли на внутреигровую валюту игры"Весёлая ферма: Возрождение"')
-        #bank.verify_transaction(НОМЕРСЧЕТАПОКУПАТЕЛЯ, КОДПОДТВЕРЖДЕНИЯ)
-        #send_money(НОМЕР СЧЕТА ПОКУПАТЕЛЯ, СУММА, "ОПИСАНИЕ ПЕРЕВОДА")
+    if "монет в обмен" in message.text:
+        exchange(message, user, bot)
     if message.text == "Дверь. Ведёт в подвал. Наверное...":
         bot.send_message(user, "Я попал в казино")
