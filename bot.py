@@ -12,10 +12,8 @@ def process(message):
     if user_id not in users:
         users[user_id] = {}
         #Тут расширяем словарь
-        users[user_id]["bed"] = 1
         users[user_id]["height"] = 10
-        users[user_id]["width"] = users[user_id]["bed"]
-        users[user_id]["what_plant"] = "🥕"
+        users[user_id]["width"] = 1
         users[user_id]["field"] = 0
         users[user_id]['balance'] = 0
         users[user_id]['id'] = user_id
