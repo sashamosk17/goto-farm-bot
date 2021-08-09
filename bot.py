@@ -13,7 +13,7 @@ def process(message):
         users[user_id] = {}
         #Тут расширяем словарь
         users[user_id]["height"] = 10
-        users[user_id]["width"] = 2
+        users[user_id]["width"] = 1
         users[user_id]["field"] = 0
         users[user_id]['balance'] = 100000
         users[user_id]['id'] = user_id
@@ -50,10 +50,10 @@ def process(message):
 
     if message.text == "/storage":
         bot.send_message(user['id'], "У вас морковок {} ".format(user["carrot"]))
-        bot.send_message(user['id'], "У вас картошок {} ".format(user["potato"]))
+        bot.send_message(user['id'], "У вас картошек {} ".format(user["potato"]))
         bot.send_message(user['id'], "У вас баклажанов {} ".format(user["eggplant"]))
         bot.send_message(user['id'], "У вас болгарских перцев {} ".format(user["pepper"]))
         bot.send_message(user['id'], "У вас острых перцев {} ".format(user["pepper_hot"]))
-        bot.send_message(user['id'], "У вас острых грибов {} ".format(user["mushrooms"]))
+        bot.send_message(user['id'], "У вас грибов {} ".format(user["mushrooms"]))
 
 bot.polling(none_stop=True)

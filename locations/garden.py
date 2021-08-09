@@ -20,36 +20,31 @@ def select_ovosh(message, user, bot, helpers):
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
     elif message.text == "🥔" and user['balance'] >= 100 * product:
         user["what_plant"] = "🥔"
-        for j in range(user["width"]):
-            bot.send_message(user['id'], ('\n'.join(map(lambda x: "🥔".join(x), user["field"]))))
+        bot.send_message(user['id'],  ('[🥔]' * user['width'] + "\n") * user['height'])
         user["potato"] = product
         user["balance"] = user["balance"] - (100 * product)
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
     elif message.text == "🍆" and user['balance'] >= 500 * product:
         user["what_plant"] = "🍆"
-        for j in range(user["width"]):
-            bot.send_message(user['id'], '\n'.join(map(lambda x: "🍆".join(x), user["field"])))
+        bot.send_message(user['id'],  ('[🍆]' * user['width'] + "\n") * user['height'])
         user["eggplant"] = product
         user["balance"] = user["balance"] - (500 * product)
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
     elif message.text == "🫑" and user['balance'] >= 1000 * product:
         user["what_plant"] = "🫑"
-        for j in range(user["width"]):
-            bot.send_message(user['id'], ('\n'.join(map(lambda x: "🫑".join(x), user["field"]))))
+        bot.send_message(user['id'],  ('[🫑]' * user['width'] + "\n") * user['height'])
         user["pepper"] = product
         user["balance"] = user["balance"] - (1000 * user["height"] * user["width"])
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
     elif message.text == "🌶" and user['balance'] >= 1500 * product:
         user["what_plant"] = "🌶"
-        for j in range(user["width"]):
-            bot.send_message(user['id'], ('\n'.join(map(lambda x: "🌶".join(x), user["field"]))))
+        bot.send_message(user['id'],  ('[🌶]' * user['width'] + "\n") * user['height'])
         user["pepper_hot"] = product
         user["balance"] = user["balance"] - (1500 * product)
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
     elif message.text == "🍄" and user['balance'] >= 1700 * product:
         user["what_plant"] = "🍄"
-        for j in range(user["width"]):
-            bot.send_message(user['id'], ('\n'.join(map(lambda x: "🍄".join(x), user["field"]))))
+        bot.send_message(user['id'], ('[🍄]' * user['width'] + "\n") * user['height'])
         user["mushrooms"] = product
         user["balance"] = user["balance"] - (1700 * product)
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
