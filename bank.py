@@ -20,12 +20,3 @@ def verify_transaction(transaction_id, code):
 
     return answer.json()
 
-def send_money(to_id, amount, description):
-    answer = requests.post(BANK_HOST + '/api/send', json={
-        'token': TRADING_TOKEN,
-        'account_id': to_id,
-        'amount': amount,
-        'description': description
-    })
-
-    return answer.json()
