@@ -13,10 +13,17 @@ def process(message):
         users[user_id] = {}
         #Тут расширяем словарь
         users[user_id]["height"] = 10
-        users[user_id]["width"] = 1
+        users[user_id]["width"] = 2
         users[user_id]["field"] = 0
         users[user_id]['balance'] = 100000
         users[user_id]['id'] = user_id
+        users[user_id]['carrot'] = 0
+        users[user_id]['potato'] = 0
+        users[user_id]['pepper'] = 0
+        users[user_id]['pepper_hot'] = 0
+        users[user_id]['mushrooms'] = 0
+        users[user_id]['eggplant'] = 0
+        bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
     
@@ -40,5 +47,13 @@ def process(message):
         location = user['location']
         manager = helpers.location_managers[location]
         manager.process_message(message, user, bot, helpers)
+
+    if message.text == "/storage":
+        bot.send_message(user['id'], "У вас морковок {} ".format(user["carrot"]))
+        bot.send_message(user['id'], "У вас картошок {} ".format(user["potato"]))
+        bot.send_message(user['id'], "У вас баклажанов {} ".format(user["eggplant"]))
+        bot.send_message(user['id'], "У вас болгарских перцев {} ".format(user["pepper"]))
+        bot.send_message(user['id'], "У вас острых перцев {} ".format(user["pepper_hot"]))
+        bot.send_message(user['id'], "У вас острых грибов {} ".format(user["mushrooms"]))
 
 bot.polling(none_stop=True)

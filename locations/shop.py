@@ -48,6 +48,7 @@ def verify_transaction(message, user, bot, helpers):
 def process_message(message, user, bot, helpers):
     if 'transaction_id' in user:
         verify_transaction(message, user, bot, helpers)
+    exchange(message, user, bot)
     if message.text == "Полочка 'Всё для животных'":
         pass
     if message.text == "Полочка 'Всё для растений'":
