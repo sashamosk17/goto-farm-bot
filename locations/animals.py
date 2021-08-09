@@ -1,5 +1,15 @@
 from datetime import datetime, timezone, timedelta
+import time
 
+def event(user, bot, helpers):
+    print("Event in animals")
+
+def background_events(users, bot, helpers):
+    while True:
+        for location in helpers.location_managers.values():
+            for user in users:
+                location.event(user, bot, helpers)
+        time.sleep(60)
 
 def welcome(user, bot, helpers):
     bot.send_message(user['id'],

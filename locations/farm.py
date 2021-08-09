@@ -15,3 +15,6 @@ def welcome(user, bot, helpers):
 def process_message(message, user, bot, helpers):
     if message.text == "На огород":
         helpers.change_location(user, "garden", bot, helpers)
+
+def event(user, bot, helpers):
+    print("Event in farm")
