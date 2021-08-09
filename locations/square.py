@@ -11,9 +11,11 @@ def process_message(message, user, bot, helpers):
     #    bot.send_message(user['id'], "Вы на площади")
 
     if 'current_question' in user:
-        if 'answer' == message.text:
+        if user['current_question']['correct'] == message.text:
             bot.send_message(user['id'], "Верно! Вам начислено 300 монет!")
             user['balance'] += 300
+        else:
+            bot.send_message(user['id'], "Нет")
         del user['current_question']
     else:
         if "/anek" in message.text:

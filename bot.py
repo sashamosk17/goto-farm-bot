@@ -1,10 +1,8 @@
 from config import TOKEN
 from telebot import TeleBot
 import helpers
-from helpers import change_location
 
 bot = TeleBot(TOKEN)
-
 users = {}
 
 
@@ -28,14 +26,14 @@ def process(message):
         user['farm_name'] = message.text
         user['location'] = 'farm'
         bot.send_message(user_id, "История")
-        change_location(user, "farm", bot, helpers)
+        helpers.change_location(user, "farm", bot, helpers)
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
 
         if location not in list(helpers.location_managers.keys()):
             bot.send_message(user['id'], "Нет такой локации")
         else:
-            change_location(user, location, bot, helpers)
+            helpers.change_location(user, location, bot, helpers)
     else:
         location = user['location']
         manager = helpers.location_managers[location]

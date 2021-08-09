@@ -10,20 +10,21 @@ def send_menu(chat_id, bot, helpers):
     bot.send_message(chat_id, "Вы вошли в магазин", reply_markup=keyboard)
 
 def exchange(message, user, bot):
-    if any['1000', '3000', '5000', '15000'] + " монет в обмен на " + any['50', '120', '199', '400'] + " готублей" == message:
+    if "{} монет в обмен на {} готублей".format() == message:
         bot.send_message(user['id'], 'Введите "/donate "НОМЕР_СЧЁТА"" без внутренних каывчек')
         user['gived_money'] = int(message.split()[2])
         user['wanted_money'] = int(message.split()[0])
     if "/donate" in message:
         user['nomer_shota'] = message.split(' ')[1]
-        bank.ask_money(user['nomer_shota'], user['gived_money'], "Пользователь поукпает внутреигровую (Весёлая ферма:Возрождение) валюту за {} готублей".format(str(user['wanted_money'])), )
+        donate_text = "Пользователь поукпает внутреигровую (Весёлая ферма:Возрождение) валюту за {} готублей".format(str(user['wanted_money']))
+        bank.ask_money(user['nomer_shota'], user['gived_money'], "test", )
         bot.send_message(user['id'], 'Введите "/verify_donate "КОД_ПОДТВЕРЖДЕНИЯ"" без внутренних кавычек')
     if "/verify_donate" in message:
         bank.verify_transaction(user['nomer_shota'], message.split[1])
         user['balance'] += user['wanted_money']
 
 def process_message(message, user, bot, helpers):
-    send_menu(user['id'], bot)
+    send_menu(user['id'], bot, helpers)
     exchange(message, user, bot)
     if message == "Полочка 'Всё для животных'":
         pass
