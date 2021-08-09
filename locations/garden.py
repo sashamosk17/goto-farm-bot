@@ -1,5 +1,4 @@
 from datetime import datetime, timezone, timedelta
-from helpers import generate_keyboard
 
 
 def welcome(user, bot, helpers):
