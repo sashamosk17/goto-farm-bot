@@ -3,7 +3,6 @@ from telebot import TeleBot
 import helpers
 
 bot = TeleBot(TOKEN)
-
 users = {}
 
 

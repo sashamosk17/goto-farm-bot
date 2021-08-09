@@ -20,10 +20,8 @@ def exchange(message, user, bot):
         bank.ask_money(user['nomer_shota'], user['gived_money'], "test", )
         bot.send_message(user['id'], 'Введите "/verify_donate "КОД_ПОДТВЕРЖДЕНИЯ"" без внутренних кавычек')
     if "/verify_donate" in message:
-        print(user['balance'])
         bank.verify_transaction(user['nomer_shota'], message.split[1])
         user['balance'] += user['wanted_money']
-        print(user['balance'])
 
 def process_message(message, user, bot, helpers):
     send_menu(user['id'], bot, helpers)
