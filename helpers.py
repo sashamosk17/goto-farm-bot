@@ -1,5 +1,5 @@
 from telebot import types
-from locations import farm, shop, square, garden, flowers, animals
+from locations import farm,square,shop,garden,flowers,animals
 
 location_managers = {
     "farm": farm,

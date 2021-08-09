@@ -1,6 +1,5 @@
-from bot import bot
-from helpers import generate_keyboard
 from datetime import datetime, timezone, timedelta
+from helpers import generate_keyboard
 
 
 def welcome(user, bot, helpers):
@@ -29,23 +28,21 @@ def process_message(message, user, bot, helpers):
         user["what_plant"] = "🌶"
     elif message.text == "🍄" and user['balance'] >= 1700 * user["height"] * user["width"]:
         user["what_plant"] = "🍄"
-    elif message.text == '/plant':
+    if message.text == '/plant':
         bot.send_message(user['id'], "Выберите овощ")
         for i in range(user["height"]):
             for j in range(user["width"]):
                 bot.send_message(user['id'], "[", user["what_plant"], "]")
         user["field"] = 1
-    elif message.text == '/gather':
+    if message.text == '/gather':
         bot.send_message(user['id'], "Собираем овощи")
         for i in range(user["height"]):
             for j in range(user["width"]):
                 bot.send_message(user['id'], "Вы получили ", user["height"] * user["width"], user["what_plant"])
         user["field"] = 0
-
-@bot.message_handler(commands=["field"])
-def field(user, bot):
-    if user["field"] == 0:
-        bot.send_message(user['id'], "Ваше поле пустое")
-    else:
-        if user["field"] == 1:
-            bot.send_message(user['id'], "Ваше поле засеяно")
+    if message.text == "/field":
+        if user["field"] == 0:
+            bot.send_message(user['id'], "Ваше поле пустое")
+        else:
+            if user["field"] == 1:
+                bot.send_message(user['id'], "Ваше поле засеяно")
