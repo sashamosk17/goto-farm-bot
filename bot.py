@@ -27,6 +27,8 @@ def process(message):
         user['location'] = 'farm'
         bot.send_message(user_id, "История")
         helpers.change_location(user, "farm", bot, helpers)
+    elif "/balance" == message.text:
+        bot.send_message(user_id, "Ваш баланс составляет {} монет".format(user['balance']))
     elif "/goto" in message.text:
         cmd, location = message.text.split(" ")
 
