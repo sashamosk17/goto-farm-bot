@@ -1,6 +1,8 @@
 from datetime import datetime, timezone, timedelta
+import time
 
-
+def event(user, bot, helpers):
+    print("Event in garden")
 
 def welcome(user, bot, helpers):
     bot.send_message(user['id'],

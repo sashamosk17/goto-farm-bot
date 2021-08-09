@@ -1,6 +1,9 @@
 import bank
 from content.prices import price_list
+import time
 
+def event(user, bot, helpers):
+    print("Event in shop")
 
 def welcome(user, bot, helpers):
     bot.send_message(user['id'],

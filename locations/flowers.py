@@ -1,4 +1,5 @@
 from datetime import datetime, timezone, timedelta
+import time
 
 def welcome(user, bot, helpers):
     bot.send_message(user['id'],
@@ -8,6 +9,9 @@ def welcome(user, bot, helpers):
                      "Чтобы засадить грядки введите /plant")
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
+
+def event(user, bot, helpers):
+    print("Event in flowers")
 
 def select_flower(message, user, bot, helpers):
     if message.text == '🥕':

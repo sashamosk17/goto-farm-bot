@@ -1,7 +1,10 @@
 import random
 from random import randint
 from content.questions import questions
+import time
 
+def event(user, bot, helpers):
+    print("Event in square")
 
 def welcome(user, bot, helpers):
     bot.send_message(user['id'], "Вы на площади")
