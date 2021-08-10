@@ -65,12 +65,17 @@ def process(message):
         manager.process_message(message, user, bot, helpers)
 
     if message.text == "/storage":
-        bot.send_message(user['id'], "У вас морковок {} ".format(user["carrot"]))
-        bot.send_message(user['id'], "У вас картошек {} ".format(user["potato"]))
-        bot.send_message(user['id'], "У вас баклажанов {} ".format(user["eggplant"]))
-        bot.send_message(user['id'], "У вас болгарских перцев {} ".format(user["pepper"]))
-        bot.send_message(user['id'], "У вас острых перцев {} ".format(user["pepper_hot"]))
-        bot.send_message(user['id'], "У вас грибов {} ".format(user["mushrooms"]))
+        storage_template = '''
+У вас морковок {}
+У вас картошек {}
+У вас баклажанов {}
+У вас болгарских перцев {} 
+У вас острых перцев {}
+У вас грибов {}
+        '''
+        bot.send_message(user['id'], storage_template.format(user["carrot"],user["potato"],user["eggplant"],user["pepper"],user["pepper_hot"],user["mushrooms"]))
+    if message.text == "/help":
+        bot.send_message(user['id'], "/shop \n/gather \n/square")
 
     with open('storage.json', 'w') as file:
         json.dump(users, file)
