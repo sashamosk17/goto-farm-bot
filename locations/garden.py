@@ -79,6 +79,7 @@ def start(message, user, bot):
 
 
 def process_message(message, user, bot, helpers):
+    print(message)
     buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄"]
     keyboard = helpers.generate_keyboard(buttons)
     user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
