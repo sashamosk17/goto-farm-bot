@@ -30,7 +30,7 @@ def process(message):
         #Тут расширяем словарь
         users[user_id]["height"] = 10
         users[user_id]["width"] = 1
-        users[user_id]["field"] = 0
+        users[user_id]["field_condition"] = 0
         users[user_id]['balance'] = 100000
         users[user_id]['id'] = user_id
         users[user_id]['carrot'] = 0
@@ -43,10 +43,10 @@ def process(message):
         users[user_id]['shamrock'] = 0
         users[user_id]['clover'] = 0
         users[user_id]['cactus'] = 0
-
-
-
-
+        users[user_id]['eggplant'] = 0
+        users[user_id]['paddock'] = 0
+        users[user_id]['plant_buster_willingness'] = False
+        users[user_id]['plant_buster_working'] = False
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
