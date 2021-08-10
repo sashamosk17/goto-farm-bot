@@ -15,6 +15,15 @@ def welcome(user, bot, helpers):
 def process_message(message, user, bot, helpers):
     if message.text == "На огород":
         helpers.change_location(user, "garden", bot, helpers)
+    if message.text == "В сад":
+        helpers.change_location(user, "flowers", bot, helpers)
+    if message.text == "К животным":
+        helpers.change_location(user, "animals", bot, helpers)
+    if message.text == "Пойти в магазин":
+        helpers.change_location(user, "shop", bot, helpers)
+    if message.text == "Пойти на площадь":
+        helpers.change_location(user, "square", bot, helpers)
+
 
 def event(user, bot, helpers):
     print("Event in farm")

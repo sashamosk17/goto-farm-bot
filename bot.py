@@ -20,7 +20,7 @@ def background_events(users, bot, helpers):
         for location in helpers.location_managers.values():
             for user in users:
                 location.event(user, bot, helpers)
-        time.sleep(60)
+        time.sleep(66666)
 
 @bot.message_handler(content_types='text')
 def process(message):
@@ -38,7 +38,15 @@ def process(message):
         users[user_id]['pepper'] = 0
         users[user_id]['pepper_hot'] = 0
         users[user_id]['mushrooms'] = 0
-        users[user_id]['eggplant'] = 0
+        users[user_id]['sunflower'] = 0
+        users[user_id]['mac'] = 0
+        users[user_id]['shamrock'] = 0
+        users[user_id]['clover'] = 0
+        users[user_id]['cactus'] = 0
+
+
+
+
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
@@ -65,12 +73,12 @@ def process(message):
         manager.process_message(message, user, bot, helpers)
 
     if message.text == "/storage":
-        bot.send_message(user['id'], "У вас морковок {} ".format(user["carrot"]))
-        bot.send_message(user['id'], "У вас картошек {} ".format(user["potato"]))
-        bot.send_message(user['id'], "У вас баклажанов {} ".format(user["eggplant"]))
-        bot.send_message(user['id'], "У вас болгарских перцев {} ".format(user["pepper"]))
-        bot.send_message(user['id'], "У вас острых перцев {} ".format(user["pepper_hot"]))
-        bot.send_message(user['id'], "У вас грибов {} ".format(user["mushrooms"]))
+        bot.send_message(user['id'], "У вас {} морковок".format(user["carrot"]))
+        bot.send_message(user['id'], "У вас {} картошек".format(user["potato"]))
+        bot.send_message(user['id'], "У вас {} баклажанов".format(user["eggplant"]))
+        bot.send_message(user['id'], "У вас {} болгарских перцев".format(user["pepper"]))
+        bot.send_message(user['id'], "У вас {} острых перцев".format(user["pepper_hot"]))
+        bot.send_message(user['id'], "У вас {} грибов ".format(user["mushrooms"]))
 
     with open('storage.json', 'w') as file:
         json.dump(users, file)

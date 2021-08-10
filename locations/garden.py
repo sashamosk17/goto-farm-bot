@@ -55,6 +55,7 @@ def select_ovosh(message, user, bot, helpers):
     user["field_condition"] = 1
     bot.send_message(message.chat.id, "Вы вернулись в меню. Напишите команду")
     bot.register_next_step_handler(message, lambda x:process_message(x,user,bot,helpers))
+
 def process_message(message, user, bot, helpers):
     print(message)
     buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄"]
