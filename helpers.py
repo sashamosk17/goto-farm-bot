@@ -10,6 +10,15 @@ location_managers = {
     "animals": animals
 }
 
+vegetables = {
+    "🥕": ['carrot', 0],
+    "🥔": ['potato', 300],
+    "🍆": ['eggplant', 500],
+    "🫑": ['pepper', 700],
+    "🌶": ['hot_pepper', 1000],
+    "🍄": ['mushrooms', 1500]
+}
+
 def generate_keyboard(buttons):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
 

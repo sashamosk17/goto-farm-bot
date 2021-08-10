@@ -9,11 +9,16 @@ bot = TeleBot(TOKEN)
 
 users = {}
 
+'''
 try:
     with open('storage.json', 'r') as file:
         users = json.load(file)
 except:
     pass
+'''
+
+user = {}
+
 
 def background_events(users, bot, helpers):
     while True:
@@ -22,12 +27,13 @@ def background_events(users, bot, helpers):
                 location.event(user, bot, helpers)
         time.sleep(66666)
 
+
 @bot.message_handler(content_types='text')
 def process(message):
     user_id = message.chat.id
     if user_id not in users:
         users[user_id] = {}
-        #Тут расширяем словарь
+        # Тут расширяем словарь
         users[user_id]["height"] = 10
         users[user_id]["width"] = 1
         users[user_id]["field_condition"] = 0
@@ -50,7 +56,7 @@ def process(message):
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
-    
+
     user = users[user_id]
 
     if "farm_name" not in user:
@@ -82,6 +88,7 @@ def process(message):
 
     with open('storage.json', 'w') as file:
         json.dump(users, file)
+
 
 background_thread = Thread(target=background_events, args=(users, bot, helpers))
 background_thread.start()

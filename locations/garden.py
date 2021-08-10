@@ -14,6 +14,17 @@ def welcome(user, bot, helpers):
 
 def select_ovosh(message, user, bot, helpers):
     product = user["height"] * user["width"]
+    if message.text in list(helpers.vegetables.keys()):
+            if helpers.vegetables[message.text][1] * product <= user['balance']:
+                user["what_plant"] = message.text
+                bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
+                user[helpers.vegetables[message.text][0]] = product
+                user["balance"] -= (helpers.vegetables[message.text][1] * product)
+                bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]))
+                user["field_condition"] = 1
+            else:
+                bot.send_message(user['id'], "У вас недосаточно деняк")
+    '''
     if message.text == '🥕':
         user["what_plant"] = "🥕"
         bot.send_message(user['id'],  ('[🥕]' * user['width'] + "\n") * user['height'])
@@ -52,7 +63,7 @@ def select_ovosh(message, user, bot, helpers):
         bot.send_message(user['id'], "Ваш баланс {}".format(user["balance"]))
     else:
         bot.send_message(user['id'], "Не хватает деняк")
-    user["field_condition"] = 1
+    '''
     bot.send_message(message.chat.id, "Вы вернулись в меню. Напишите команду")
     bot.register_next_step_handler(message, lambda x:process_message(x,user,bot,helpers))
 
