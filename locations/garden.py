@@ -1,7 +1,9 @@
 from datetime import datetime, timezone, timedelta
 import time
 from threading import Thread
-from telebot import types
+from content import goods
+
+
 def event(user, bot, helpers):
     print("Event in garden")
 
@@ -50,29 +52,39 @@ def process_message(message, user, bot, helpers):
 
 def select_ovosh(message, user, bot, helpers):
     product = user["height"] * user["width"]
-    if message.text in list(helpers.vegetables.keys()):
-        if helpers.vegetables[message.text][1] * product <= user['balance']:
-
+    if message.text in list(goods.vegetables.keys()):
+        if goods.vegetables[message.text][1] * product <= user['balance']:
             user["what_plant"] = message.text
-            bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
-            user[helpers.vegetables[message.text][0]] = product
-            user["balance"] -= (helpers.vegetables[message.text][1] * product)
+            #bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
+            user[goods.vegetables[message.text][0]] = product
+            user["balance"] -= (goods.vegetables[message.text][1] * product)
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]))
             user["field_condition"] = 1
-            print(user["field_condition"])
+            user['grow_time'] = goods.vegetables[message.text][2]
+            print(message.id, user['id'])
+            a = Thread(target=animate_of_grow, args=(message.id, bot, user))
+            a.start()
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
-
-    bot.send_message(message.chat.id, "Вы вернулись в меню. Напишите команду.")
+    bot.send_message(message.chat.id, "Вы вернулись в меню. Напишите команду")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
 
+
+def animate_of_grow(message_id, bot, user):
+    time.sleep(1)
+    bot.edit_message_text(text='[.]\n' * 10, chat_id=user['id'], message_id=message_id)
+    #bot.edit_message_text('.\n' * 10, user['id'], message_id)
+    time.sleep(user['grow_time'])
+    for i in range(10):
+        bot.edit_message_text(text='[' + user['what_plant'] + '\n', chat_id=user['id'], message_id=message_id)
+    del user['grow_time']
 
 
 def animate(message_id, chat_id, bot, user):
     time.sleep(0.5)
 
-    for i in range(1,12):
-        bot.edit_message_text("[ ]\n" * i + ("[" + user["what_plant"] + "] "+"\n") * (11 - i), chat_id, message_id)
+    for i in range(1,11):
+        bot.edit_message_text("[ ]\n" * i + user["what_plant"]+"\n" * (11 - i), chat_id, message_id)
         time.sleep(0.5)
     bot.send_message(user['id'], "Ваше поле пустое")
 
@@ -88,12 +100,13 @@ def process_message(message, user, bot, helpers):
     print(message)
     buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄"]
     keyboard = helpers.generate_keyboard(buttons)
-    keyboard = types.InlineKeyboardMarkup()
+    user["field_condition"] = 0
     user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
                      ["[", "]"]]
     if message.text == '/plant':
         bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
+
     if message.text == '/gather':
         print(user["field_condition"])
         if user["field_condition"] == 0:

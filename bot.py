@@ -17,8 +17,6 @@ except:
     pass
 '''
 
-user = {}
-
 
 def background_events(users, bot, helpers):
     while True:
