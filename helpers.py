@@ -18,6 +18,13 @@ vegetables = {
     "🌶": ['hot_pepper', 1000],
     "🍄": ['mushrooms', 1500]
 }
+flowers = {
+    "🌻":["sunflower",100],
+    "🌷":["tulip",500],
+    "☘":["clover",1000],
+    "🌹":["rose",1600],
+    "🌵":["cactus",3400],
+}
 
 def generate_keyboard(buttons):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)

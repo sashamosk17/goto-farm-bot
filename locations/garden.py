@@ -46,7 +46,7 @@ def animate(message_id, chat_id, bot, user):
 
 def start(message, user, bot):
     message = bot.send_message(message.chat.id, ("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
-    print(("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
+    print(("[",user["what_flower"] * user['width'] +"]\n") * user['height'])
     t = Thread(target=animate, args=(message.id, message.chat.id, bot, user))
     t.start()
 

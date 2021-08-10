@@ -15,6 +15,22 @@ def event(user, bot, helpers):
 
 def select_flower(message, user, bot, helpers):
     product = user["height"] * user["width"]
+    if message.text in list(helpers.flowers.keys()):
+        if helpers.flowers[message.text][1] * product <= user['balance']:
+
+            user["what_flower"] = message.text
+            bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
+            user[helpers.flowers[message.text][0]] = product
+            user["balance"] -= (helpers.flowers[message.text][1] * product)
+            bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]))
+            user["flowers_condition"] = 1
+            print(user["flowers_condition"])
+        else:
+            bot.send_message(user['id'], "У вас недосаточно деняк")
+
+    bot.send_message(message.chat.id, "Вы вернулись в меню. Напишите команду.")
+    bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
+    '''
     if message.text == '🌻':
         user["what_flower"] = "🌻"
         bot.send_message(user['id'], ('[🌻]' * user['width'] + "\n") * user['height'])
@@ -50,23 +66,22 @@ def select_flower(message, user, bot, helpers):
     user["field_condition_flower"] = 1
     bot.send_message(message.chat.id, "Вы вернулись в меню. Напишите команду")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
-
+'''
 def process_message(message, user, bot, helpers):
     print(message)
-    buttons = ["🌻", "🌷", "☘", "🍀", "🌵"]
+    buttons = ["🌻", "🌷", "☘", "🌹", "🌵"]
     keyboard = helpers.generate_keyboard(buttons)
-    user["field_condition_flower"] = 0
-    user["field"] = [["[","]"], ["[","]"],["[","]"],["[","]"],["[","]"],["[","]"],["[","]"],["[","]"],["[","]"]]
+    user["flowers_condition"] = 0
+    user["flowers"] = [["[","]"], ["[","]"],["[","]"],["[","]"],["[","]"]]
     if message.text == '/plant':
         bot.send_message(user['id'], "Выберите цветок", reply_markup= keyboard)
         bot.register_next_step_handler(message, lambda x: select_flower(x, user, bot, helpers))
     if message.text == '/gather':
         bot.send_message(user['id'], "Собираем цветы")
         bot.send_message(user['id'], "Вы получили {} {}".format(user["height"] * user["width"], user["what_flower"]))
-        user["field_condition_flower"] = 0
+        user["flowers_condition"] = 0
     if message.text == "/field":
-        if user["field_condition_flower"] == 0:
+        if user["flowers_condition"] == 0:
             bot.send_message(user['id'], "Ваше поле пустое")
         else:
-            if user["field_condition_flower"] == 1:
-                bot.send_message(user['id'], "Ваше поле засеяно")
+            bot.send_message(user['id'], "Ваше поле засеяно")
