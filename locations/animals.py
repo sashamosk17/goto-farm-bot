@@ -1,8 +1,10 @@
 from datetime import datetime, timezone, timedelta
 import time
 
+
 def event(user, bot, helpers):
     print("Event in animals")
+
 
 def background_events(users, bot, helpers):
     while True:
@@ -11,36 +13,41 @@ def background_events(users, bot, helpers):
                 location.event(user, bot, helpers)
         time.sleep(60)
 
+
 def welcome(user, bot, helpers):
+    keyboard = helpers.generate_keyboard(['Привести животных', 'Собрать ресурсы', 'Покормить животных', 'Проверить загоны', 'Вернуться на ферму'])
     bot.send_message(user['id'],
                      "Вы в амбаре. У вас есть загоны, в которые можно разместить 5 животных. Покупать дополнительные"
-                     " загоны можно в магазине.\n"
-                     "/goto shop \n"
-                     "Чтобы посадить животных в загоны введите /plant")
+                     " загоны можно в магазине.", reply_markup=keyboard)
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
 
+
 def process_message(message, user, bot, helpers):
-    buttons = ["🐓", "🐂", "🐄", "🐑"]
+    buttons = ["🐓", "🐂", "🐄", "🐑", 'Вернуться на ферму']
     keyboard = helpers.generate_keyboard(buttons)
+    if message.text == "Вернуться на ферму":
+        helpers.change_location(user, "farm", bot, helpers)
+        return
     user["field_animal"] = 0
-    if message.text == "🐓" and user['balance'] >= 0 * user["height"]* user["width"]:
+    if message.text == "🐓" and user['balance'] >= 0 * user["height"] * user["width"]:
         user["what_animal"] = "🐓"
-    elif message.text == "🐂" and user['balance'] >= 100 * user["height"]* user["width"]:
+    elif message.text == "🐂" and user['balance'] >= 100 * user["height"] * user["width"]:
         user["what_animal"] = "🐂"
     elif message.text == "🐄" and user['balance'] >= 500 * user["height"] * user["width"]:
         user["what_animal"] = "🐄"
     elif message.text == "🐑" and user['balance'] >= 1000 * user["height"] * user["width"]:
         user["what_animal"] = "🐑"
-    if message.text == '/feed':
+    if message.text == 'Покормить животных':
         bot.send_message(user['id'], "Вы покормили животных")
-    if message.text == '/gather':
+        #ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
+    if message.text == 'Собрать ресурсы':
         bot.send_message(user['id'], "Вы собрали ресурсы с животных(??)")
         for i in range(user["height"]):
             for j in range(user["width"]):
                 bot.send_message(user['id'], "Вы получили ", user["height"] * user["width"], user["what_animal"])
         user["field_animal"] = 0
-    if message.text == "/field_animal":
+    if message.text == "Проверить загоны":
         if user["field_animal"] == 0:
             bot.send_message(user['id'], "Ваше поле пустое")
         else:

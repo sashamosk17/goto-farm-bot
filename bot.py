@@ -56,7 +56,6 @@ def process(message):
         users[user_id]['plant_buster_willingness'] = False
         users[user_id]['plant_buster_working'] = False
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
-        bot.send_message(user_id, "Привет, {}! Укажи название фермы.".format(str(message.from_user.username)))
         return
 
     user = users[user_id]

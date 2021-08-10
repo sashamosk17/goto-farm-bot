@@ -7,12 +7,45 @@ def event(user, bot, helpers):
 
 
 def welcome(user, bot, helpers):
+    keyboard = helpers.generate_keyboard(['Посадить овощи', 'Собрать урожай', 'Проверить грядки', 'Вернуться на ферму'])
     bot.send_message(user['id'],
-                     "Вы на огороде. У вас есть грядка на которой вы можете выращивать 10 овощей. Покупать дополнительные грядки можно в магазине.\n"
-                     "/goto shop \n"
-                     "Чтобы засадить грядки введите /plant")
+                     "Вы на огороде. У вас есть грядка на которой вы можете выращивать 10 овощей."
+                     " Покупать дополнительные грядки можно в магазине.", reply_markup=keyboard)
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
+
+
+def process_message(message, user, bot, helpers):
+    print(message)
+    if message.text == "Вернуться на ферму":
+        helpers.change_location(user, "farm", bot, helpers)
+        return
+    buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄", 'Вернуться на ферму']
+    keyboard = helpers.generate_keyboard(buttons)
+    user["field_condition"] = 0
+    user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
+                     ["[", "]"]]
+    user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
+                     ["[", "]"]]
+    if message.text == 'Посадить овощи':
+        bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
+        bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
+    if message.text == 'Собрать урожай':
+        print(user["field_condition"])
+        if user["field_condition"] == 0:
+            bot.send_message(user['id'], "Ваше поле пустое")
+        else:
+            bot.send_message(user['id'], "Собираем овощи")
+            bot.send_message(user['id'], "Вы получили {} {}".format(user["height"] * user["width"], user["what_plant"]))
+            start(message, user, bot)
+            user["field_condition"] = 0
+    if message.text == "Проверить грядки":
+        if user["field_condition"] == 0:
+            bot.send_message(user['id'], "Ваше поле пустое")
+        else:
+            if user["field_condition"] == 1:
+                bot.send_message(user['id'], "Ваше поле засеяно")
+
 
 
 def select_ovosh(message, user, bot, helpers):
