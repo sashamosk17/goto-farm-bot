@@ -4,6 +4,7 @@ from config import TOKEN
 from telebot import TeleBot
 from threading import Thread
 import helpers
+from content import goods
 
 bot = TeleBot(TOKEN)
 
@@ -37,23 +38,35 @@ def process(message):
         users[user_id]["flowers_condition"] = 0
         users[user_id]["height"] = 10
         users[user_id]["width"] = 1
+        users[user_id]["flowers_condition"] = 0
         users[user_id]["field_condition"] = 0
         users[user_id]["animal_condition"] = 0
         users[user_id]['balance'] = 100000
         users[user_id]['id'] = user_id
+
         users[user_id]['carrot'] = 0
         users[user_id]['potato'] = 0
         users[user_id]['pepper'] = 0
         users[user_id]['pepper_hot'] = 0
         users[user_id]['mushrooms'] = 0
         users[user_id]['sunflower'] = 0
+
         users[user_id]['tulip'] = 0
         users[user_id]['shamrock'] = 0
         users[user_id]['rose'] = 0
         users[user_id]['clover'] = 0
         users[user_id]['cactus'] = 0
         users[user_id]['eggplant'] = 0
+
         users[user_id]['paddock'] = 0
+        users[user_id]['chicken'] = 0
+        users[user_id]['butterfly'] = 0
+        users[user_id]['cow'] = 0
+        users[user_id]['sheep'] = 0
+        users[user_id]['egg'] = 0
+        users[user_id]['spark'] = 0
+        users[user_id]['milk'] = 0
+        users[user_id]['wool'] = 0
         users[user_id]['plant_buster_willingness'] = False
         users[user_id]['plant_buster_working'] = False
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
@@ -80,24 +93,7 @@ def process(message):
         manager = helpers.location_managers[location]
         manager.process_message(message, user, bot, helpers)
 
-    if message.text == "/storage":
-        storage_template = '''
-У вас: 
-🥕морковок {} 
-🥔картошек {} 
-🍆баклажанов {}
-🫑болгарских перцев {} 
-🌶острых перцев {}
-🍄грибов {}
-🌻подсолнухов {}
-🌷тюльпанов {}
-☘клевера {}
-🌹роз {}
-🌵кактуса{}
-        '''
-        bot.send_message(user['id'],
-                         storage_template.format(user["carrot"], user["potato"], user["eggplant"], user["pepper"],
-                                                 user["pepper_hot"], user["mushrooms"]))
+
     if message.text == "/help":
         bot.send_message(user['id'], "/shop \n/gather \n/square")
 
