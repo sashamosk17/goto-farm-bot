@@ -73,11 +73,12 @@ def select_ovosh(message, user, bot, helpers):
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]))
             user["field_condition"] = 1
             user['grow_time'] = goods.vegetables[message.text][2]
-            print(message.id, user['id'])
             a = Thread(target=animate_of_grow, args=(message.id, bot, user))
             a.start()
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
+    else:
+        bot.send_message(user['id'], "Эт не оващ")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
 
 
@@ -108,7 +109,7 @@ def start(message, user, bot):
 
 
 def process_message(message, user, bot, helpers):
-    print(message)
+    print(message.text)
     buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄"]
     keyboard = helpers.generate_keyboard(buttons)
     user["field_condition"] = 0

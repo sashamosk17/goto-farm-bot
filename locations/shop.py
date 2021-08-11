@@ -59,7 +59,7 @@ def animals(message, user, helpers, bot):
             user['balance'] -= 3000
             user['paddock'] += 1
         else:
-            bot.send_message(user['id'], "У меня нет столько денек")
+            bot.send_message(user['id'], "У меня нет столько деняжек")
 
 
 def plants(message, user, helpers, bot):
