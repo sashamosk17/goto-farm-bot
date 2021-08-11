@@ -103,7 +103,8 @@ def process_message(message, user, bot, helpers):
             bot.send_message(user['id'], "Овоши сгнили")
             return
         if (time.time() - user["plant_time"] < user["grow_time"]):
-            bot.send_message(user['id'], "Овоши не созрели. Осталось {} минут".format(int(user["plant_time"]+user["grow_time"] - time.time())//60),  reply_markup=keyboard)
+            get_time(message, user, bot, keyboard)
+            #bot.send_message(user['id'], "Овоши не созрели. Осталось {} минут".format(int(user["plant_time"]+user["grow_time"] - time.time())//60),  reply_markup=keyboard)
         if user["field_condition"] == 0:
             bot.send_message(user['id'], "Ваше поле пустое")
         elif (time.time()- user["plant_time"] > user["grow_time"] ):
@@ -146,3 +147,10 @@ def process_message(message, user, bot, helpers):
             if user["field_condition"] == 1:
                 bot.send_message(user['id'], "Ваше поле засеяно")
 '''
+
+
+def get_time(message, user, bot, keyboard):
+    needed_time = user["plant_time"] + user["grow_time"] - time.time()
+    minutes = int(user["plant_time"] + user["grow_time"] - time.time() / 60)
+    seconds = int(needed_time - minutes * 60)
+    bot.send_message(user['id'], "Овоши не созрели. Осталось {} минут, {} секунд".format(minutes, seconds), reply_markup=keyboard)
