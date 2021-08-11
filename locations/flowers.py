@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 import time
-
+from content import goods
 
 def welcome(user, bot, helpers):
     keyboard = helpers.generate_keyboard(['Посадить цветы', 'Собрать урожай', 'Проверить грядки', 'Вернуться на ферму', 'Склад продуктов'])
@@ -15,7 +15,7 @@ def event(user, bot, helpers):
     print("Event in flowers")
 
 
-def select_flower(message, user, bot, helpers, goods):
+def select_flower(message, user, bot, helpers):
     product = user["height"] * user["width"]
     if message.text in list(goods.flowers.keys()):
         if goods.flowers[message.text][1] * product <= user['balance']:
@@ -75,8 +75,6 @@ def select_flower(message, user, bot, helpers, goods):
 
 
 '''  # Это, наверное, можно удалить, но пока оставлю для back up'a
-
-
 
 
 def process_message(message, user, bot, helpers):

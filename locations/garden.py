@@ -36,14 +36,6 @@ def process_message(message, user, bot, helpers):
     user["field_condition"] = 0
     user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
                      ["[", "]"]]
-    if message.text == "Склад продуктов":
-        bot.send_message(user, "У вас {} морковок\n"
-                               "У вас {} картошек\n"
-                               "У вас {} баклажанов\n"
-                               "У вас {} перчев\n"
-                               "У вас {} горячих перцев\n"
-                               "У вас {} хрибов\n".format(user["carrot"], user["potato"], user["eggplant"], user["pepper"],
-                                                 user["pepper_hot"], user["mushrooms"]))
     if message.text == 'Посадить овощи':
         bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
@@ -71,20 +63,20 @@ def select_ovosh(message, user, bot, helpers):
             #bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
             user[goods.vegetables[message.text][0]] = product
             user["balance"] -= (goods.vegetables[message.text][1] * product)
+            bot.send_message(message.chat.id, ("[", user["what_plant"] * user['width'] + "]\n") * user['height'])
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]))
             user["field_condition"] = 1
             user['grow_time'] = goods.vegetables[message.text][2]
-            print(message.id, user['id'])
             '''
             a = Thread(target=animate_of_grow, args=(message.id, bot, user))
             a.start()
             '''
-            print(user["field_condition"])
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
     else:
         bot.send_message(user['id'], "Эт не оващ")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
+
 '''
 def animate_of_grow(message_id,chat_id,user,bot):
     time.sleep(1)
@@ -100,6 +92,7 @@ def start_grow(message, user, bot):
     a = Thread(target=animate, args=(message.id, message.chat.id, bot, user))
     a.start_grow()
 '''
+
 def animate(message_id, chat_id, bot, user):
     time.sleep(0.5)
 
@@ -115,32 +108,3 @@ def start(message, user, bot):
     t = Thread(target=animate, args=(message.id, message.chat.id, bot, user))
     t.start()
 
-'''
-def process_message(message, user, bot, helpers):
-    print(message)
-    buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄"]
-    keyboard = helpers.generate_keyboard(buttons)
-    user["field_condition"] = 0
-    user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
-                     ["[", "]"]]
-    if message.text == '/plant':
-        bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
-        bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
-
-    if message.text == '/gather':
-        print(user["field_condition"])
-        if user["field_condition"] == 0:
-            bot.send_message(user['id'], "Ваше поле пустое")
-        else:
-            bot.send_message(user['id'], "Собираем овощи")
-            start(message, user, bot)
-            bot.send_message(user['id'], "Вы получили {} {}".format(user["height"] * user["width"], user["what_plant"]))
-            user["field_condition"] = 0
-
-    if message.text == "/field":
-        if user["field_condition"] == 0:
-            bot.send_message(user['id'], "Ваше поле пустое")
-        else:
-            if user["field_condition"] == 1:
-                bot.send_message(user['id'], "Ваше поле засеяно")
-'''

@@ -4,6 +4,7 @@ from config import TOKEN
 from telebot import TeleBot
 from threading import Thread
 import helpers
+from content import goods
 
 bot = TeleBot(TOKEN)
 

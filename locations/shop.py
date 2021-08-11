@@ -25,7 +25,6 @@ def exchange(message, user, bot):
     for (money, price) in price_list.items():
         if "{} монет в обмен на {} готублей".format(money, price) == message.text:
             answer = bank.ask_money(user['id'], price, "test")
-
             if not answer:
                 bot.send_message(user['id'], 'Ошибка взаимодействия с банком')
             elif answer['state'] == 'error':
@@ -40,7 +39,6 @@ def verify_transaction(message, user, bot, helpers):
     try:
         code = int(message.text)
         answer = bank.verify_transaction(user['transaction_id'], code)
-
         if not answer:
             bot.send_message(user['id'], 'Ошибка взаимодействия с банком')
         elif answer['state'] == 'error':
@@ -58,8 +56,11 @@ def animals(message, user, helpers, bot):
         if user['balance'] >= 3000:
             user['balance'] -= 3000
             user['paddock'] += 1
+            bot.send_message(user['id'], "Конгратс! Вы купили 1 загон для животных!")
+            user['location'] = 'shop'
         else:
-            bot.send_message(user['id'], "У меня нет столько деняжек")
+            bot.send_message(user['id'], "У меня нет столько денек")
+            user['location'] = 'shop'
 
 
 def plants(message, user, helpers, bot):
@@ -67,8 +68,10 @@ def plants(message, user, helpers, bot):
         if user['balance'] >= 1000:
             user['balance'] -= 1000
             user['plant_buster_willingness'] = True
+            user['location'] = 'shop'
         else:
             bot.send_message(user['id'], "У меня нет столько деньег")
+            user['location'] = 'shop'
 
 
 def process_message(message, user, bot, helpers):
@@ -82,7 +85,7 @@ def process_message(message, user, bot, helpers):
         verify_transaction(message, user, bot, helpers)
     exchange(message, user, bot)
     if message.text == "Полочка 'Всё для животных'":
-        buttons = ["Тут продаются палки. Сделаю-ка из них загоны (1000 монет)", "Назад"]
+        buttons = ["Тут продаются палки. Сделаю-ка из них загоны (3000 монет)", "Назад"]
         keyboard = helpers.generate_keyboard(buttons)
         bot.send_message(user['id'], "Тут всё для животных", reply_markup=keyboard)
     if message.text == "Полочка 'Всё для растений'":
@@ -97,4 +100,5 @@ def process_message(message, user, bot, helpers):
     if "монет в обмен" in message.text:
         exchange(message, user, bot)
     if message.text == "Дверь. Ведёт в подвал. Наверное...":
-        bot.send_message(user['id'], "Я попал в казино")
+        bot.send_message(user['id'], "Я попал в казино (интеграция)")
+        user['location'] = 'shop'
