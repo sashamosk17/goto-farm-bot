@@ -19,6 +19,7 @@ def generate_keyboard(buttons):
 
     return keyboard
 
+
 def change_location(user, location, bot, helpers):
     user['location'] = location
     manager = location_managers[location]

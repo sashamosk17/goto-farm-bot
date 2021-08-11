@@ -25,8 +25,10 @@ def process_message(message, user, bot, helpers):
             bot.send_message(user['id'], "Верно! Вам начислено 30 монет!")
             user['balance'] += 30
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user['balance']))
+            helpers.change_location(user, "square", bot, helpers)
         else:
             bot.send_message(user['id'], "Нет")
+            helpers.change_location(user, "square", bot, helpers)
         del user['current_question']
     else:
         if "Тут проходит викторина" in message.text:
@@ -37,7 +39,8 @@ def process_message(message, user, bot, helpers):
         if "Кто-то предлагает купить.. грядки? За 10 000 золотых он продаёт 10 грядок..." in message.text:
             if user['balance'] >= 10000:
                 user['width'] += 1
-                user['balace'] -= 10000
+                user['balance'] -= 10000
+                bot.send_message(user['id'], "Ура! Вы купили 10 грядок для овощей и цветов!!1")
+                helpers.change_location(user, "square", bot, helpers)
             else:
                 bot.send_message(user['id'], "Не хватает деняк")
-    bot.send_message(user['id'], 'Вы всё ещё на дееврейской площади.')

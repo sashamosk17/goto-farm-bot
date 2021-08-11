@@ -37,6 +37,7 @@ def process(message):
         users[user_id]["height"] = 10
         users[user_id]["width"] = 1
         users[user_id]["field_condition"] = 0
+        users[user_id]["animal_condition"] = 0
         users[user_id]['balance'] = 100000
         users[user_id]['id'] = user_id
         users[user_id]['carrot'] = 0
@@ -86,7 +87,9 @@ def process(message):
 У вас острых перцев {}
 У вас грибов {}
         '''
-        bot.send_message(user['id'], storage_template.format(user["carrot"],user["potato"],user["eggplant"],user["pepper"],user["pepper_hot"],user["mushrooms"]))
+        bot.send_message(user['id'],
+                         storage_template.format(user["carrot"], user["potato"], user["eggplant"], user["pepper"],
+                                                 user["pepper_hot"], user["mushrooms"]))
     if message.text == "/help":
         bot.send_message(user['id'], "/shop \n/gather \n/square")
 
