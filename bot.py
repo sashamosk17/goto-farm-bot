@@ -46,8 +46,9 @@ def process(message):
         users[user_id]['pepper_hot'] = 0
         users[user_id]['mushrooms'] = 0
         users[user_id]['sunflower'] = 0
-        users[user_id]['mac'] = 0
+        users[user_id]['tulip'] = 0
         users[user_id]['shamrock'] = 0
+        users[user_id]['rose'] = 0
         users[user_id]['clover'] = 0
         users[user_id]['cactus'] = 0
         users[user_id]['eggplant'] = 0
@@ -80,12 +81,18 @@ def process(message):
 
     if message.text == "/storage":
         storage_template = '''
-У вас морковок {}
-У вас картошек {}
-У вас баклажанов {}
-У вас болгарских перцев {} 
-У вас острых перцев {}
-У вас грибов {}
+У вас: 
+🥕морковок {} 
+🥔картошек {} 
+🍆баклажанов {}
+🫑болгарских перцев {} 
+🌶острых перцев {}
+🍄грибов {}
+🌻подсолнухов {}
+🌷тюльпанов {}
+☘клевера {}
+🌹роз {}
+🌵кактуса{}
         '''
         bot.send_message(user['id'],
                          storage_template.format(user["carrot"], user["potato"], user["eggplant"], user["pepper"],
