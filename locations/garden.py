@@ -1,6 +1,5 @@
 from datetime import datetime, timezone, timedelta
 import time
-from datetime import datetime
 from threading import Thread
 from content import goods
 
@@ -67,10 +66,8 @@ def select_ovosh(message, user, bot, helpers):
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]))
             user["field_condition"] = 1
             user['grow_time'] = goods.vegetables[message.text][2]
-            '''
-            a = Thread(target=animate_of_grow, args=(message.id, bot, user))
-            a.start()
-            '''
+            #a = Thread(target=animate_of_grow, args=(message.id, bot, user))
+            #a.start()
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
     else:
@@ -83,8 +80,7 @@ def animate_of_grow(message_id,chat_id,user,bot):
     #bot.edit_message_text(text='[.]\n' * 10, chat_id=user['id'], message_id=message_id)
     #bot.edit_message_text('.\n' * 10, user['id'], message_id)
     time.sleep(user['grow_time'])
-    for i in range(10):
-        bot.edit_message_text(text='[' + user['what_plant'] + '\n', chat_id=user['id'], message_id=message_id)
+    bot.edit_message_text(text='[{}]'.format(user['what_plant'] * 10), chat_id=user['id'], message_id=message_id)
     del user['grow_time']
 def start_grow(message, user, bot):
     message = bot.send_message(message.chat.id, ("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
@@ -98,6 +94,8 @@ def animate(message_id, chat_id, bot, user):
 
     for i in range(1,12):
         bot.edit_message_text("[ ]\n" * i + ("[" + user["what_plant"] + "] "+"\n") * (11 - i), chat_id, message_id)
+    for i in range(1,11):
+        bot.edit_message_text("[ ]\n" * i + user["what_plant"]+"\n" * (11 - i), chat_id, message_id)
         time.sleep(0.5)
     bot.send_message(user['id'], "Ваше поле пустое")
 

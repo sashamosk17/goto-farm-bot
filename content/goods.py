@@ -36,3 +36,9 @@ sell_price = {
     "🐄": ['cow', 1200],
     "🐑": ['sheep', 2000]
 }
+
+types_of_goods = {
+    'Овощи': vegetables,
+    'Цветы': flowers,
+}
+

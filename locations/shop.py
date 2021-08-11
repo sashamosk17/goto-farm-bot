@@ -1,6 +1,7 @@
 import bank
 from content.prices import price_list
 import time
+from content import goods
 
 
 def event(user, bot, helpers):
@@ -16,7 +17,7 @@ def welcome(user, bot, helpers):
 
 def send_menu(chat_id, bot, helpers):
     buttons = ["Полочка 'Всё для животных'", "Полочка 'Всё для растений'", "В углу стоит подозрительный гном",
-               "Дверь. Ведёт в подвал. Наверное...", "Вернуться на ферму"]
+               "Дверь. Ведёт в подвал. Наверное...", "Вернуться на ферму", "Продажа"]
     keyboard = helpers.generate_keyboard(buttons)
     bot.send_message(chat_id, "Вы вошли в магазин", reply_markup=keyboard)
 
@@ -75,6 +76,22 @@ def plants(message, user, helpers, bot):
 
 
 def process_message(message, user, bot, helpers):
+    if message.text == "Продажа":
+        buttons = list(goods.types_of_goods.keys())
+        buttons.append("Назад")
+        keyboard = helpers.generate_keyboard(buttons)
+        bot.send_message(user['id'], "Вы хотите продать...", reply_markup=keyboard)
+    if message.text in list(goods.types_of_goods.keys()):
+        buttons = list(goods.types_of_goods[message.text].keys())
+        buttons.append("Назад")
+        keyboard = helpers.generate_keyboard(buttons)
+        bot.send_message(user['id'], "Вы хотите продать...", reply_markup=keyboard)
+    if message.text in list(goods.sell_price.keys()):
+        if user[goods.sell_price[message.text][0]] > 0:
+            user[goods.sell_price[message.text][0]] = 0
+            user['balance'] += goods.sell_price[message.text][1]
+        else:
+            bot.send_message(user['id'], "А продавать-то и нечего")
     if message.text == "Вернуться на ферму":
         helpers.change_location(user, 'farm', bot, helpers)
     if message.text == "Назад":
