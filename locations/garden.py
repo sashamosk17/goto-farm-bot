@@ -151,6 +151,7 @@ def process_message(message, user, bot, helpers):
 
 def get_time(message, user, bot, keyboard):
     needed_time = user["plant_time"] + user["grow_time"] - time.time()
-    minutes = int(user["plant_time"] + user["grow_time"] - time.time() / 60)
+    minutes = int((user["plant_time"] + user["grow_time"] - time.time()) / 60)
     seconds = int(needed_time - minutes * 60)
+
     bot.send_message(user['id'], "Овоши не созрели. Осталось {} минут, {} секунд".format(minutes, seconds), reply_markup=keyboard)
