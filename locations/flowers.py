@@ -3,9 +3,9 @@ import time
 from content import goods
 
 def welcome(user, bot, helpers):
-    keyboard = helpers.generate_keyboard(['Посадить цветы', 'Собрать урожай', 'Проверить грядки', 'Вернуться на ферму', 'Склад продуктов'])
+    keyboard = helpers.generate_keyboard(['Посадить цветы', 'Собрать урожай', 'Проверить грядки', 'Вернуться на ферму'])
     bot.send_message(user['id'],
-                     "Вы в саду. У вас есть грядки, на которых вы можете выращивать 10 цветов. "
+                     "Вы в саду. У вас есть грядки, на которых вы можете выращивать цветы. "
                      "Покупать дополнительные грядки можно в магазине.", reply_markup=keyboard)
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
@@ -79,18 +79,12 @@ def select_flower(message, user, bot, helpers):
 
 def process_message(message, user, bot, helpers):
     print(message)
-    buttons = ["🌻", "🌷", "☘", "🌹", "🌵", 'Вернуться на ферму', 'Склад продуктов']
+    buttons = ["🌻", "🌷", "☘", "🌹", "🌵", 'Вернуться на ферму']
     keyboard = helpers.generate_keyboard(buttons)
     if message.text == "Вернуться на ферму":
         helpers.change_location(user, "farm", bot, helpers)
         return
     user["flowers"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"]]
-    if message.text == "Склад продуктов":
-        bot.send_message(user, "У вас {} подсолнухов\n"
-                               "У вас {} тюльпанов\n"
-                               "У вас {} клеверов\n"
-                               "У вас {} роз\n"
-                               "У вас {} kekтусов\n".format(user["sunflower"], user["tulip"], user["clover"], user["rose"],user["cactus"]))
     if message.text == 'Посадить цветы':
         bot.send_message(user['id'], "Выберите цветок", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_flower(x, user, bot, helpers))
