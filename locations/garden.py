@@ -43,6 +43,22 @@ def select_ovosh(message, user, bot, helpers):
         bot.send_message(user['id'], "Эт не цветок")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
 
+'''
+def animate_of_grow(message_id,chat_id,user,bot):
+    time.sleep(1)
+    #bot.edit_message_text(text='[.]\n' * 10, chat_id=user['id'], message_id=message_id)
+    #bot.edit_message_text('.\n' * 10, user['id'], message_id)
+    time.sleep(user['grow_time'])
+    for i in range(10):
+        bot.edit_message_text(text='[' + user['what_plant'] + '\n', chat_id=user['id'], message_id=message_id)
+    del user['grow_time']
+def start_grow(message, user, bot):
+    message = bot.send_message(message.chat.id, ("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
+    print(("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
+    a = Thread(target=animate, args=(message.id, message.chat.id, bot, user))
+    a.start_grow()
+'''
+
 def animate(message_id, chat_id, bot, user):
     time.sleep(0.5)
     for i in range(1, 11):
