@@ -35,7 +35,7 @@ def process_message(message, user, bot, helpers):
     user["field_animal"] = 0
     if message.text == "🐓":
         user["what_product"] = "🥚"
-    if message.text == "🐂":
+    if message.text == "🦋":
         user["what_product"] = "✨"
     if message.text == "🐄":
         user["what_product"] = "🥛"
@@ -43,7 +43,7 @@ def process_message(message, user, bot, helpers):
         user["what_product"] = "🦙"
     if message.text == 'Покормить животных 🥕':
         user["carrot"] -= user[goods.animals[message.text][2]]
-        user["feed_time"] == time.time()
+        user["feed_time"] = time.time()
         bot.send_message(user['id'], "Вы покормили животных")
         #ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
     if (user["feed_time"] + user[goods.animals[message.text][3]])< time.time() + 60*60:
