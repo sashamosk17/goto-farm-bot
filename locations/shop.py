@@ -68,12 +68,12 @@ def plants(message, user, helpers, bot):
     if message.text == "Купить удобрение (1000 монет)":
         if user['balance'] >= 1000:
             user['balance'] -= 1000
-            if user['plant_buster_willingness']:
+            if user['buster_willingness']:
                 bot.send_message(user['id'], "Я купил кучу удобрений! Но она оказалась настолько большой, что её увидел Михаил. Ваши удобрения были съедены.")
-                user['plant_buster_willingness'] = False
+                user['buster_willingness'] = False
             else:
                 bot.send_message(user['id'], "Я купил кучу удобрений! Но пока что она небольшая.")
-                user['plant_buster_willingness'] = True
+                user['buster_willingness'] = True
             user['location'] = 'shop'
         else:
             bot.send_message(user['id'], "У меня нет столько деньег")

@@ -69,8 +69,9 @@ def process(message):
         users[user_id]['spark'] = 0
         users[user_id]['milk'] = 0
         users[user_id]['wool'] = 0
-        users[user_id]['plant_buster_willingness'] = False
-        users[user_id]['plant_buster_working'] = False
+        users[user_id]['buster_willingness'] = False
+        users[user_id]['buster'] = False
+        users[user_id]['f_buster'] = False
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
         return
 

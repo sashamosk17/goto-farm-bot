@@ -9,7 +9,7 @@ def event(user, bot, helpers):
 
 
 def welcome(user, bot, helpers):
-    keyboard = helpers.generate_keyboard(['Посадить овощи', 'Собрать урожай', 'Проверить грядки', 'Вернуться на ферму'])
+    keyboard = helpers.generate_keyboard(['Посадить овощи', 'Собрать урожай', 'Проверить грядки', "Удобрить почву", 'Вернуться на ферму'])
     bot.send_message(user['id'],
                      "Вы на огороде. У вас есть грядка на которой вы можете выращивать 10 овощей."
                      " Покупать дополнительные грядки можно в магазине.", reply_markup=keyboard)
@@ -30,6 +30,9 @@ def select_ovosh(message, user, bot, helpers):
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]), reply_markup=keyboard)
             user["field_condition"] = 1
             user['grow_time'] = goods.vegetables[message.text][2]
+            if user['buster']:
+                user['grow_time'] *= 0.8
+                user['buster'] = False
             print(message.id, user['id'])
             '''
             a = Thread(target=animate_of_grow, args=(message.id, bot, user))
@@ -80,6 +83,22 @@ def process_message(message, user, bot, helpers):
         return
     user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
                      ["[", "]"]]
+    if message.text == "Удобрить почву":
+        if not user['buster']:
+            if user['buster_willingness']:
+                if user['field_condition'] == 1:
+                    bot.send_message(user['id'], "Удобрение нужно сыпать на незасеянную почву")
+                    return
+                else:
+                    user['buster'] = True
+                    user['buster_willingness'] = False
+                    bot.send_message(user['id'], "Теперь поле удобрено")
+            else:
+                bot.send_message(user['id'], "У вас нет удобрний")
+                return
+        else:
+            bot.send_message(user['id'], "Ваше поля уже удобрено")
+            return
     if message.text == "Склад продуктов":
         bot.send_message(user, "У вас {} морковок\n"
                                "У вас {} картошек\n"
@@ -111,7 +130,7 @@ def process_message(message, user, bot, helpers):
             bot.send_message(user['id'], "Ваше поле пустое")
         else:
             if user["field_condition"] == 1:
-                bot.send_message(user['id'], "Ваше поле засеяно",)
+                get_time(message, user, bot, keyboard)
 
 
 def get_time(message, user, bot, keyboard):

@@ -3,7 +3,7 @@ import time
 from content import goods
 from threading import Thread
 def welcome(user, bot, helpers):
-    keyboard = helpers.generate_keyboard(['Посадить цветы', 'Собрать урожай', 'Проверить грядки', 'Вернуться на ферму'])
+    keyboard = helpers.generate_keyboard(['Посадить цветы', 'Собрать урожай', 'Проверить грядки', "Удобрить почву",'Вернуться на ферму'])
     bot.send_message(user['id'],
                      "Вы в саду. У вас есть грядки, на которых вы можете выращивать цветы. "
                      "Покупать дополнительные грядки можно в магазине.", reply_markup=keyboard)
@@ -29,6 +29,9 @@ def select_flower(message, user, bot, helpers):
             bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]), reply_markup=keyboard)
             user["flowers_condition"] = 1
             user["growf_time"] = goods.flowers[message.text][2]
+            if user['buster']:
+                user['growf_time'] *= 0.8
+                user['f_buster'] = False
             print(user["flowers_condition"])
             helpers.change_location(user, "flowers", bot, helpers)
         else:
@@ -62,6 +65,22 @@ def process_message(message, user, bot, helpers):
         helpers.change_location(user, "farm", bot, helpers)
         return
     user["flowers"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"]]
+    if message.text == "Удобрить почву":
+        if not user['f_buster']:
+            if user['buster_willingness']:
+                if user['flowers_condition'] == 1:
+                    bot.send_message(user['id'], "Удобрение нужно сыпать на незасеянную почву")
+                    return
+                else:
+                    user['f_buster'] = True
+                    user['buster_willingness'] = False
+                    bot.send_message(user['id'], "Теперь поле удобрено")
+            else:
+                bot.send_message(user['id'], "У вас нет удобрний")
+                return
+        else:
+            bot.send_message(user['id'], "Ваше поля уже удобрено")
+            return
     if message.text == 'Посадить цветы':
         bot.send_message(user['id'], "Выберите растение", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_flower(x, user, bot, helpers))
@@ -86,7 +105,7 @@ def process_message(message, user, bot, helpers):
             bot.send_message(user['id'], "Ваше поле пустое")
             helpers.change_location(user, "flowers", bot, helpers)
         else:
-            bot.send_message(user['id'], "Ваше поле засеяно")
+            get_time(message, user, bot, keyboard)
             helpers.change_location(user, "flowers", bot, helpers)
 
 def get_time(message, user, bot, keyboard):
