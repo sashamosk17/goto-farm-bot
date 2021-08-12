@@ -35,7 +35,9 @@ def process(message):
         # Тут расширяем словарь
         users[user_id]["plant_time"] = 0
         users[user_id]["what_plant"] = 0
-        users[user_id]["flowers_condition"] = 0
+        users[user_id]["plantf_time"] = 0
+        users[user_id]["growf_time"] = 0
+        users[user_id]["what_flowers"] = 0
         users[user_id]["height"] = 10
         users[user_id]["width"] = 1
         users[user_id]["flowers_condition"] = 0
