@@ -1,5 +1,6 @@
 from datetime import datetime, timezone, timedelta
 import time
+from content import goods
 
 
 def event(user, bot, helpers):
@@ -32,16 +33,28 @@ def process_message(message, user, bot, helpers):
         helpers.change_location(user, "farm", bot, helpers)
         return
     user["field_animal"] = 0
-
+    if message.text == "🐓":
+        user["what_product"] = "🥚"
+    if message.text == "🐂":
+        user["what_product"] = "✨"
+    if message.text == "🐄":
+        user["what_product"] = "🥛"
+    if message.text == "🐑":
+        user["what_product"] = "🦙"
     if message.text == 'Покормить животных 🥕':
+        user["carrot"] -= user[goods.animals[message.text][2]]
+        user["feed_time"] == time.time()
         bot.send_message(user['id'], "Вы покормили животных")
-        # ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
+        #ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
+    if (user["feed_time"] + user[goods.animals[message.text][3]])< time.time() + 60*60:
+        bot.send_message(user['id'], "Животные умерли😭")
+        user["animal_condition"] = 0
+
     if message.text == 'Собрать ресурсы 🥛':
         bot.send_message(user['id'], "Вы собрали ресурсы с животных(??)")
-        for i in range(user["height"]):
-            for j in range(user["width"]):
-                bot.send_message(user['id'], "Вы получили ", user["height"] * user["width"], user["what_animal"])
-    # user["field_animal"] = 0 ИЛИ ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
+        bot.send_message(user['id'], "Вы получили {} {}".format(user["height"] * user["width"], user["what_product"]), reply_markup=keyboard)
+        user[goods.products['what_product'][0]] += user['paddock']
+       # user["field_animal"] = 0 ИЛИ ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
     if message.text == "Проверить загоны 🥅":
         if user["field_animal"] == 0:
             bot.send_message(user['id'], "Ваши загоны пусты")

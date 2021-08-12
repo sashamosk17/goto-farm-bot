@@ -54,14 +54,30 @@ def verify_transaction(message, user, bot, helpers):
 
 def animals(message, user, helpers, bot):
     if message.text == "Кажется, Степан готов построить загон за скромную сумму 🪚... (3000 монет)":
-        if user['balance'] >= 3000:
-            user['balance'] -= 3000
-            user['paddock'] += 1
-            bot.send_message(user['id'], "Конгратс! Вы купили 1 загон для животных!")
-            user['location'] = 'shop'
+        if all([animal for animal in user[list(goods.animals.keys())]]) == 0:
+            if user['balance'] >= 3000:
+                user['balance'] -= 3000
+                user['paddock'] += 1
+                bot.send_message(user['id'], "Конгратс! Вы купили 1 загон для животных!")
+                user['location'] = 'shop'
+            else:
+                bot.send_message(user['id'], "У меня нет столько денек")
+                user['location'] = 'shop'
         else:
-            bot.send_message(user['id'], "У меня нет столько денек")
-            user['location'] = 'shop'
+            bot.send_message(user['id'], "Сначала надо опустошить загоны")
+    if message.text == "Купить животинку":
+        buttons = list(goods.animals.keys())
+        buttons.append("Назад")
+        keyboard = helpers.generate_keyboard(buttons)
+        bot.send_message(user['id'], "Вы хотите купить...", reply_markup=keyboard)
+    if message.text in list(goods.animals.keys()):
+        if user[goods.animals[message.text][0]] < user['paddock']:
+
+            user[goods.animals[message.text][0]] += 1
+            user['set_animal'] = goods.animals[message.text][0]
+
+        else:
+            bot.send_message(user['id'], "У вас не хватает загонов")
 
 
 def plants(message, user, helpers, bot):
@@ -107,7 +123,7 @@ def process_message(message, user, bot, helpers):
         verify_transaction(message, user, bot, helpers)
     exchange(message, user, bot)
     if message.text == "Полочка 'Всё для животных'":
-        buttons = ["Кажется, Степан готов построить загон за скромную сумму 🪚... (3000 монет)", "Назад"]
+        buttons = ["Кажется, Степан готов построить загон за скромную сумму 🪚... (3000 монет)", "Купить животинку", "Назад"]
         keyboard = helpers.generate_keyboard(buttons)
         bot.send_message(user['id'], "Тут всё для животных", reply_markup=keyboard)
     if message.text == "Полочка 'Всё для растений'":
