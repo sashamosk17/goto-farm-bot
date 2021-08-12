@@ -23,7 +23,7 @@ def welcome(user, bot, helpers):
     hour = current_time.hour
 
 
-def process_message(message, user, bot, helpers):
+def process_message(message, user, bot, helpers, users):
     buttons = ["🐓", "🐂", "🐄", "🐑", 'Вернуться на ферму']
     keyboard = helpers.generate_keyboard(buttons)
     if message.text == "Вернуться на ферму":

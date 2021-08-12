@@ -14,7 +14,7 @@ def welcome(user, bot, helpers):
     hour = current_time.hour
 
 
-def process_message(message, user, bot, helpers):
+def process_message(message, user, bot, helpers, users):
     if message.text == "На огород":
         helpers.change_location(user, "garden", bot, helpers)
         return

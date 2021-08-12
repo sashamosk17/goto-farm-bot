@@ -80,7 +80,7 @@ def plants(message, user, helpers, bot):
             user['location'] = 'shop'
 
 
-def process_message(message, user, bot, helpers):
+def process_message(message, user, bot, helpers, users):
     if message.text == "Продажа":
         buttons = list(goods.types_of_goods.keys())
         buttons.append("Назад")
