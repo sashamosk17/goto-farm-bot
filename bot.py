@@ -96,10 +96,6 @@ def process(message):
         manager = helpers.location_managers[location]
         manager.process_message(message, user, bot, helpers, users)
 
-
-    if message.text == "/help":
-        bot.send_message(user['id'], "/shop \n/gather \n/square")
-
     with open('storage.json', 'w') as file:
         json.dump(users, file)
 

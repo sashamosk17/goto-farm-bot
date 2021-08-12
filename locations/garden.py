@@ -12,20 +12,24 @@ def welcome(user, bot, helpers):
     keyboard = helpers.generate_keyboard(
         ['Посадить овощи', 'Собрать урожай', 'Проверить грядки', "Удобрить почву", 'Вернуться на ферму'])
     bot.send_message(user['id'],
-                     "Вы на огороде. У вас есть грядка на которой вы можете выращивать 10 овощей."
-                     " Покупать дополнительные грядки можно в магазине.", reply_markup=keyboard)
+                     "Вы на огороде 🌽. У вас есть грядки ({}), на которых вы можете выращивать овощи."
+                     " Покупать дополнительные грядки можно на площади.".format(user['height'] * user['width']),
+                     reply_markup=keyboard)
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
 
 
 def select_ovosh(message, user, bot, helpers):
-    buttons = ['Вернуться на ферму', 'Склад продуктов']
+    buttons = ['Вернуться на ферму', 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
     product = user["height"] * user["width"]
+    if message.text == "Назад":
+        helpers.change_location(user, 'garden', bot, helpers)
+        return
     if message.text in list(goods.vegetables.keys()):
         if goods.vegetables[message.text][1] * product <= user['balance']:
             user["what_plant"] = message.text
-            # bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
+            bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
             user["plant_time"] = time.time()
             print(user["plant_time"])
             user[goods.vegetables[message.text][0]] = product
@@ -48,7 +52,7 @@ def select_ovosh(message, user, bot, helpers):
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
     else:
-        bot.send_message(user['id'], "Эт не цветок")
+        bot.send_message(user['id'], "Эт не оващ")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
 
 
@@ -71,7 +75,7 @@ def animate(message_id, chat_id, bot, user):
     time.sleep(0.5)
     for i in range(1, 11):
         bot.edit_message_text("[ ]\n" * i + ("[" + user["what_plant"] + "] " + "\n") * (11 - i), chat_id, message_id)
-    time.sleep(0.5)
+    time.sleep(1)
 
 
 def start(message, user, bot):
@@ -83,11 +87,13 @@ def start(message, user, bot):
 
 def process_message(message, user, bot, helpers, users):
     print(message)
-    buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄", 'Вернуться на ферму', 'Склад продуктов']
+    buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄", 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
     if message.text == "Вернуться на ферму":
         helpers.change_location(user, "farm", bot, helpers)
         return
+    if message.text == "Назад":
+        helpers.change_location(user, 'garden', bot, helpers)
     user["field"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"],
                      ["[", "]"]]
     if message.text == "Удобрить почву":

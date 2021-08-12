@@ -5,11 +5,12 @@ from threading import Thread
 
 
 def welcome(user, bot, helpers):
-    keyboard = helpers.generate_keyboard(
-        ['Посадить цветы', 'Собрать урожай', 'Проверить грядки', "Удобрить почву", 'Вернуться на ферму'])
+    keyboard = helpers.generate_keyboard(['Посадить цветы', 'Собрать цветы', 'Проверить поле',
+                                          "Удобрить почву", 'Вернуться на ферму'])
     bot.send_message(user['id'],
-                     "Вы в саду. У вас есть грядки, на которых вы можете выращивать цветы. "
-                     "Покупать дополнительные грядки можно в магазине.", reply_markup=keyboard)
+                     "Вы в саду 🌼. У вас есть грядки ({}), на которых вы можете выращивать цветы. "
+                     "Покупать дополнительные грядки можно в магазине.".format(user['height'] * user['width']),
+                     reply_markup=keyboard)
     current_time = datetime.now(timezone(timedelta(hours=3)))
     hour = current_time.hour
 
@@ -19,8 +20,12 @@ def event(user, bot, helpers):
 
 
 def select_flower(message, user, bot, helpers):
-    buttons = ['Вернуться на ферму']
+    buttons = ['Вернуться на ферму', 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
+    if message.text == "Назад":
+        helpers.change_location(user, 'flowers', bot, helpers)
+    if message.text == "Вернуться на ферму":
+        helpers.change_location(user, "farm", bot, helpers)
     product = user["height"] * user["width"]
     if message.text in list(goods.flowers.keys()):
         if goods.flowers[message.text][1] * product <= user['balance']:
@@ -42,7 +47,7 @@ def select_flower(message, user, bot, helpers):
             helpers.change_location(user, "flowers", bot, helpers)
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
-    elif user["garden_condition"] == 1:
+    elif user["flowers_condition"] == 1:
         bot.send_message(user['id'], "Ваше поле засажено",
                          reply_markup=keyboard)
     else:
@@ -71,11 +76,13 @@ def start(message, user, bot):
 
 def process_message(message, user, bot, helpers, users):
     print(message)
-    buttons = ["🌻", "🌷", "☘", "🌹", "🌵", 'Вернуться на ферму']
+    buttons = ["🌻", "🌷", "☘", "🌹", "🌵", 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
     if message.text == "Вернуться на ферму":
         helpers.change_location(user, "farm", bot, helpers)
         return
+    if message.text == "Назад":
+        helpers.change_location(user, 'flowers', bot, helpers)
     user["flowers"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"]]
     if message.text == "Удобрить почву":
         if not user['f_buster']:
@@ -94,11 +101,11 @@ def process_message(message, user, bot, helpers, users):
             bot.send_message(user['id'], "Ваше поля уже удобрено")
             return
     if message.text == 'Посадить цветы':
-        bot.send_message(user['id'], "Выберите растение", reply_markup=keyboard)
+        bot.send_message(user['id'], "Выберите цвэток", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_flower(x, user, bot, helpers))
-    if message.text == 'Собрать урожай':
+    if message.text == 'Собрать цветы':
         if (time.time() > user["plantf_time"] + user["growf_time"] + 60 * 60):
-            bot.send_message(user['id'], "цветы сгнили")
+            bot.send_message(user['id'], "Цветы сгнили :(")
             user["flowers_condition"] = 0
             return
         if (time.time() - user["plantf_time"] < user["growf_time"]):
@@ -113,7 +120,7 @@ def process_message(message, user, bot, helpers, users):
                              "Вы получили {} {}".format(user["height"] * user["width"], user["what_flower"]),
                              reply_markup=keyboard)
             user["flowers_condition"] = 0
-    if message.text == "Проверить грядки":
+    if message.text == "Проверить поле":
         if user["flowers_condition"] == 0:
             bot.send_message(user['id'], "Ваше поле пустое")
             helpers.change_location(user, "flowers", bot, helpers)

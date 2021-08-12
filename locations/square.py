@@ -66,3 +66,4 @@ def process_message(message, user, bot, helpers, users):
                 helpers.change_location(user, "square", bot, helpers)
             else:
                 bot.send_message(user['id'], "Не хватает деняк")
+                helpers.change_location(user, "square", bot, helpers)
