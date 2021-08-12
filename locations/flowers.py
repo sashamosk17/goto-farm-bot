@@ -16,7 +16,7 @@ def event(user, bot, helpers):
 
 
 def select_flower(message, user, bot, helpers):
-    buttons = ['Вернуться на ферму', 'Склад продуктов']
+    buttons = ['Вернуться на ферму']
     keyboard = helpers.generate_keyboard(buttons)
     product = user["height"] * user["width"]
     if message.text in list(goods.flowers.keys()):
@@ -33,7 +33,13 @@ def select_flower(message, user, bot, helpers):
             helpers.change_location(user, "flowers", bot, helpers)
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
+    elif user["garden_condition"] == 1:
+            bot.send_message(user['id'], "Ваше поле засажено",
+                             reply_markup=keyboard)
 
+
+    else:
+        bot.send_message(user['id'], "У вас недосаточно деняк", reply_markup=keyboard)
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
 def animate(message_id, chat_id, bot, user):
     time.sleep(0.5)
@@ -57,7 +63,7 @@ def process_message(message, user, bot, helpers):
         return
     user["flowers"] = [["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"], ["[", "]"]]
     if message.text == 'Посадить цветы':
-        bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
+        bot.send_message(user['id'], "Выберите растение", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_flower(x, user, bot, helpers))
     if message.text == 'Собрать урожай':
         if (time.time() > user["plantf_time"] + user["growf_time"] + 60 * 60):
