@@ -3,7 +3,8 @@ from datetime import datetime, timezone, timedelta
 
 def welcome(user, bot, helpers):
     keyboard = helpers.generate_keyboard(
-        ['На огород', 'В сад', 'К животным', 'Пойти в магазин', 'Пойти на площадь', 'Посмотреть баланс', 'Склад'])
+        ['На огород', 'В сад', 'Пойти в магазин', 'Пойти на площадь', 'Посмотреть баланс',
+         'Склад'])  # ДОПИЛИТЬ ЖИВОТНЫХ
     bot.send_message(user['id'],
                      "Вы на ферме! Здесь можно выращивать овощи в огороде, собирать цветы в саду, "
                      "и разводить скот в загонах для последущей продажи в магазине. "
@@ -57,6 +58,7 @@ def process_message(message, user, bot, helpers):
                                                  user["sunflower"], user["tulip"], user["clover"],
                                                  user["rose"], user["cactus"], user["egg"],
                                                  user["spark"], user["milk"], user["wool"]))
+
 
 def event(user, bot, helpers):
     print("Event in farm")
