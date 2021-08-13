@@ -156,5 +156,5 @@ def process_message(message, user, bot, helpers, users):
     if "монет в обмен" in message.text:
         exchange(message, user, bot)
     if message.text == "Дверь. Ведёт в подвал. Наверное...":
-        bot.send_message(user['id'], "Я попал в казино 🃏🎰🎱 💸 ✅✅✅(интеграция)")
+        bot.send_message(user['id'], "Я попал в казино 🃏🎰🎱 💸 ✅✅✅(@The_Venetian_Casino_bot)")
         user['location'] = 'shop'
