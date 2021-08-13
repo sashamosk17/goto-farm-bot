@@ -138,6 +138,7 @@ def process_message(message, user, bot, helpers, users):
             time_feed_sec = int(user['animal_farming_timer'] - time.time()) - time_feed_min * 60
             msg = "В ваших загонах сидят {} {}. Они дадут ресурсы через {} минут, {} секунд. Их надо будет покормть через {} минут {} секунд".format(user[user['animal']], goods.ru_animals[user['animal']], time_min, time_sec, time_feed_min, time_feed_sec)
             bot.send_message(user['id'], msg)
+            bot.send_message(user['id'], '[{}]')
     if message.text == 'Прогнать животных':
         user[user['animal']] = 0
         user['animal'] = False
