@@ -65,12 +65,12 @@ def animals(message, user, helpers, bot):
                 user['location'] = 'shop'
         else:
             bot.send_message(user['id'], "Сначала надо опустошить загоны")
-    if message.text == "Купить животинку":
+    elif message.text == "Купить животинку":
         buttons = list(goods.animals.keys())
         buttons.append("Назад")
         keyboard = helpers.generate_keyboard(buttons)
         bot.send_message(user['id'], "Вы хотите купить...", reply_markup=keyboard)
-    if message.text in list(goods.animals.keys()):
+    elif message.text in list(goods.animals.keys()):
         if user[goods.animals[message.text][0]] < user['paddock']:
             wanted_animals = goods.animals.copy()
             del wanted_animals[message.text]
@@ -81,10 +81,19 @@ def animals(message, user, helpers, bot):
                 bot.send_message(user['id'], "Ваши загоны заполнены другими животными")
             else:
                 user[goods.animals[message.text][0]] += 1
-                user['set_animal'] = goods.animals[message.text][0]
+                user['animal'] = goods.animals[message.text][0]
+                if user[user['animal']] == 1:
+                    user['animal_feed_time'] = goods.animals[message.text][2] + time.time()
+                    user['animal_farming_time'] = goods.animals[message.text][3] + time.time()
                 bot.send_message(user['id'], "Животина успешно куплена")
         else:
             bot.send_message(user['id'], "У вас не хватает загонов")
+    elif message.text == "Купить чайный гриб (30000). Увеличивает плодоносность животных в два раза":
+        if user['balance'] >= 30000:
+            user['magic_grib'] = 2
+        else:
+            bot.send_message(user['id'], "Нет монет")
+
 
 
 def plants(message, user, helpers, bot):
@@ -92,7 +101,8 @@ def plants(message, user, helpers, bot):
         if user['balance'] >= 1000:
             user['balance'] -= 1000
             if user['buster_willingness']:
-                bot.send_message(user['id'], "Я купил кучу удобрений! Но она оказалась настолько большой, что её увидел Михаил. Ваши удобрения были съедены, *все*.")
+                bot.send_message(user['id'], "Я купил кучу удобрений! Но она оказалась настолько большой, "
+                                             "что её увидел Михаил. Ваши удобрения были съедены, *все*.")
                 user['buster_willingness'] = False
             else:
                 bot.send_message(user['id'], "Я купил кучу удобрений! Но пока что она небольшая.")
@@ -130,7 +140,8 @@ def process_message(message, user, bot, helpers, users):
         verify_transaction(message, user, bot, helpers)
     exchange(message, user, bot)
     if message.text == "Полочка 'Всё для животных'":
-        buttons = ["Кажется, Степан готов расширить загон за скромную сумму 🪚... (3000 монет)", "Купить животинку", "Назад"]
+        buttons = ["Кажется, Степан готов расширить загон за скромную сумму 🪚... (3000 монет)", "Купить животинку",
+                   "Купить чайный гриб (30000). Увеличивает плодоносность животных в два раза", "Назад"]
         keyboard = helpers.generate_keyboard(buttons)
         bot.send_message(user['id'], "Тут всё для животных", reply_markup=keyboard)
     if message.text == "Полочка 'Всё для растений'":

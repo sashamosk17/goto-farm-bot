@@ -13,14 +13,14 @@ try:
 except:
     users = {}
 
-'''
+
 def background_events(users, bot, helpers):
     while True:
         for location in helpers.location_managers.values():
             for user in users:
-                location.event(user, bot, helpers)
-        time.sleep(66666)
-'''
+                location.event(user, bot, users)
+        time.sleep(30)
+
 
 
 @bot.message_handler(content_types='text')
@@ -68,6 +68,11 @@ def process(message):
         users[user_id]['buster_willingness'] = False
         users[user_id]['buster'] = False
         users[user_id]['f_buster'] = False
+
+        users[user_id]['animal'] = False
+        users[user_id]['animal_feed_time'] = False
+        users[user_id]['animal_farming_time'] = False
+        users[user_id]['magic_grib'] = 1
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
 
         with open('storage.json', 'w') as file:
@@ -100,7 +105,7 @@ def process(message):
         json.dump(users, file)
 
 
-#background_thread = Thread(target=background_events, args=(users, bot, helpers))
-#background_thread.start()
+background_thread = Thread(target=background_events, args=(users, bot, helpers))
+background_thread.start()
 
 bot.polling(none_stop=True)

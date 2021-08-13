@@ -24,3 +24,4 @@ def change_location(user, location, bot, helpers):
     user['location'] = location
     manager = location_managers[location]
     manager.welcome(user, bot, helpers)
+
