@@ -26,29 +26,30 @@ def select_ovosh(message, user, bot, helpers):
         helpers.change_location(user, 'garden', bot, helpers)
         return
     if message.text in list(goods.vegetables.keys()):
-        if goods.vegetables[message.text][1] * product <= user['balance']:
-            user["what_plant"] = message.text
-            bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
-            user["plant_time"] = time.time()
-            print(user["plant_time"])
-            user[goods.vegetables[message.text][0]] = product
-            user["balance"] -= (goods.vegetables[message.text][1] * product)
-            bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]),
-                             reply_markup=keyboard)
-            user["field_condition"] = 1
-            user['grow_time'] = goods.vegetables[message.text][2]
-            if user['buster']:
-                user['grow_time'] *= 0.8
-                user['buster'] = False
-            print(message.id, user['id'])
-            '''
-            a = Thread(target=animate_of_grow, args=(message.id, bot, user))
-            a.start()
-            '''
-            print(user["field_condition"])
-            print(user["what_plant"])
-        else:
-            bot.send_message(user['id'], "У вас недосаточно деняк")
+        if user["field_condition"] == 0:
+            if goods.vegetables[message.text][1] * product <= user['balance']:
+                user["what_plant"] = message.text
+                bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
+                user["plant_time"] = time.time()
+                print(user["plant_time"])
+                user[goods.vegetables[message.text][0]] = product
+                user["balance"] -= (goods.vegetables[message.text][1] * product)
+                bot.send_message(user['id'], "Ваш баланс составляет {} монет".format(user["balance"]),
+                                 reply_markup=keyboard)
+                user["field_condition"] = 1
+                user['grow_time'] = goods.vegetables[message.text][2]
+                if user['buster']:
+                    user['grow_time'] *= 0.8
+                    user['buster'] = False
+                print(message.id, user['id'])
+                '''
+                a = Thread(target=animate_of_grow, args=(message.id, bot, user))
+                a.start()
+                '''
+                print(user["field_condition"])
+                print(user["what_plant"])
+            else:
+                bot.send_message(user['id'], "У вас недосаточно деняк")
     else:
         bot.send_message(user['id'], "Эт не оващ")
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
@@ -122,8 +123,11 @@ def process_message(message, user, bot, helpers):
                                                  user["pepper_hot"], user["mushrooms"]))
 
     if message.text == 'Посадить овощи':
-        bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
-        bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
+        if user["field_condition"] == 0:
+            bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
+            bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
+        else:
+            bot.send_message(user['id'], "Ваше поле засеяно", reply_markup=keyboard)
     if message.text == 'Собрать урожай':
         if (time.time() > user["plant_time"] + user["grow_time"] + 60 * 60):
             bot.send_message(user['id'], "Овощи сгнили")

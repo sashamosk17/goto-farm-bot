@@ -46,7 +46,7 @@ def process_message(message, user, bot, helpers):
         user["feed_time"] = time.time()
         bot.send_message(user['id'], "Вы покормили животных")
         #ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
-    if (user["feed_time"] + user[goods.animals[message.text][3]])< time.time() + 60*60:
+    if (user["feed_time"] + user[goods.animals[message.text][3]])< (user["feed_time"] + user[goods.animals[message.text][3]]) + 60*60:
         bot.send_message(user['id'], "Животные умерли😭")
         user["animal_condition"] = 0
 
