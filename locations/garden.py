@@ -6,7 +6,10 @@ from content import goods
 
 def event(user, bot, helpers):
     print("Event in garden")
-
+    '''
+    if (time.time() > user["plant_time"] + user["grow_time"] + 60 * 50):
+        bot.send_message(user['id'], "Овощи сгниют через 10 минут")
+    '''
 
 def welcome(user, bot, helpers):
     keyboard = helpers.generate_keyboard(
@@ -41,10 +44,10 @@ def select_ovosh(message, user, bot, helpers, users):
                 if user['buster']:
                     user['grow_time'] *= 0.8
                     user['buster'] = False
-                '''
+
                 a = Thread(target=animate_of_grow, args=(message.id, bot, user))
                 a.start()
-                '''
+
             else:
                 bot.send_message(user['id'], "У вас недосаточно деняк")
     else:
@@ -58,19 +61,19 @@ def animate_of_grow(message_id, user, bot):
                           message_id=message_id, chat_id=user['id'])
 
 
-'''
+
 def start_grow(message, user, bot):
     message = bot.send_message(message.chat.id, ("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
     print(("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
     a = Thread(target=animate, args=(message.id, message.chat.id, bot, user))
     a.start_grow()
-'''
+
 
 
 def animate(message_id, chat_id, bot, user):
     time.sleep(1)
     for i in range(1, 11):
-        bot.edit_message_text("[ ]\n" * i + ("[" + user["what_plant"] + "] " + "\n") * (11 - i), chat_id, message_id)
+        bot.edit_message_text("[ ]\n" * i + ("[" + user["what_plant"] + "] " + "\n") * (user['width'] + 1 - i)* user["height"], chat_id, message_id)
     time.sleep(1)
 
 
@@ -107,6 +110,16 @@ def process_message(message, user, bot, helpers, users):
         else:
             bot.send_message(user['id'], "Ваши грядки уже удобрены")
             return
+    if message.text == "Склад продуктов":
+        bot.send_message(user, "У вас {} морковок\n"
+                               "У вас {} картошек\n"
+                               "У вас {} баклажанов\n"
+                               "У вас {} перчев\n"
+                               "У вас {} горячих перцев\n"
+                               "У вас {} хрибов\n".format(user["carrot"], user["potato"], user["eggplant"],
+                                                          user["pepper"],
+                                                          user["pepper_hot"], user["mushrooms"]))
+
     if message.text == 'Посадить овощи':
         if user["field_condition"] == 0:
             bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
@@ -114,11 +127,16 @@ def process_message(message, user, bot, helpers, users):
         else:
             bot.send_message(user['id'], "Ваши грядки уже засеяны")
     if message.text == 'Собрать урожай':
+        if (time.time() > user["plant_time"] + (user["grow_time"]/2) and time.time()< user["plant_time"] + user["grow_time"]):
+            bot.send_message(user['id'], "Овощи растут")
+            bot.send_message(user['id'], ('[🌱]'.format(message.text) * user['width'] + "\n") * user['height'])
         if (time.time() > user["plant_time"] + user["grow_time"] + 60 * 60):
             bot.send_message(user['id'], "Овощи сгнили")
+            bot.send_message(user['id'], ('[💩]'.format(message.text) * user['width'] + "\n") * user['height'])
             return
         if (time.time() - user["plant_time"] < user["grow_time"]):
             get_time(message, user, bot, keyboard)
+            bot.send_message(user['id'], ('[.]'.format(message.text) * user['width'] + "\n") * user['height'])
             # bot.send_message(user['id'], "Овощи не созрели. Осталось {} минут".format(int(user["plant_time"]+user["grow_time"] - time.time())//60),  reply_markup=keyboard)
         if user["field_condition"] == 0:
             bot.send_message(user['id'], "Ваши грядки пусты")

@@ -12,11 +12,11 @@ def event(user, bot, users):
                 users[user]['animal_feed_time'] = False
                 users[user]['animal_farming_timer'] = False
                 bot.send_message(user, "Ваши живтные умерли от голода.")
-            else:
+            elif users[user]['animal_feed_time'] - 270 > time.time():
                 time_min = int(users[user]['animal_feed_time'] - time.time()) // 60
                 time_sec = int(users[user]['animal_feed_time'] - time.time()) - time_min * 60
                 msg = "Ваши животные умрут через {} минут, {} секунд".format(time_min, time_sec)
-                users[user]['check'] = bot.send_message(users[user]['id'], msg)
+                bot.send_message(users[user]['id'], msg)
     if users[user]['animal_farming_time'] != False:
         if users[user]['animal_farming_time'] < time.time():
             if users[user]['animal'] == 'chicken':
