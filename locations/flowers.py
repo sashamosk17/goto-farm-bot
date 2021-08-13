@@ -69,7 +69,6 @@ def animate_of_grow(message_id, user, bot):
 
 def start(message, user, bot):
     message = bot.send_message(message.chat.id, ("[", user["what_flower"] * user['width'] + "]\n") * user['height'])
-    print(("[", user["what_flower"] * user['width'] + "]\n") * user['height'])
     t = Thread(target=animate, args=(message.id, message.chat.id, bot, user))
     t.start()
 
@@ -93,26 +92,26 @@ def process_message(message, user, bot, helpers, users):
                 else:
                     user['f_buster'] = True
                     user['buster_willingness'] = False
-                    bot.send_message(user['id'], "Теперь поле удобрено")
+                    bot.send_message(user['id'], "Теперь поле одобрено")
             else:
-                bot.send_message(user['id'], "У вас нет удобрний")
+                bot.send_message(user['id'], "У вас нет удобрений")
                 return
         else:
-            bot.send_message(user['id'], "Ваше поля уже удобрено")
+            bot.send_message(user['id'], "Ваши греки уже удобрены")
             return
     if message.text == 'Посадить цветы':
         bot.send_message(user['id'], "Выберите цвэток", reply_markup=keyboard)
         bot.register_next_step_handler(message, lambda x: select_flower(x, user, bot, helpers))
     if message.text == 'Собрать цветы':
         if (time.time() > user["plantf_time"] + user["growf_time"] + 60 * 60):
-            bot.send_message(user['id'], "Цветы сгнили :(")
+            bot.send_message(user['id'], "Цветы сгнили :'(")
             user["flowers_condition"] = 0
             return
         if (time.time() - user["plantf_time"] < user["growf_time"]):
             get_time(message, user, bot, keyboard)
             # bot.send_message(user['id'], "цветы не созрели. Осталось {} минут".format(int(user["plantf_time"]+user["growf_time"] - time.time())//60),  reply_markup=keyboard)
         if user["flowers_condition"] == 0:
-            bot.send_message(user['id'], "Ваше поле пустое")
+            bot.send_message(user['id'], "Ваши грядки пусты")
         elif (time.time() - user["plantf_time"] > user["growf_time"]):
             bot.send_message(user['id'], "Собираем цветы")
             start(message, user, bot)
@@ -122,7 +121,7 @@ def process_message(message, user, bot, helpers, users):
             user["flowers_condition"] = 0
     if message.text == "Проверить поле":
         if user["flowers_condition"] == 0:
-            bot.send_message(user['id'], "Ваше поле пустое")
+            bot.send_message(user['id'], "Ваши грядки пустbl")
             helpers.change_location(user, "flowers", bot, helpers)
         else:
             get_time(message, user, bot, keyboard)
