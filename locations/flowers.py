@@ -30,7 +30,6 @@ def select_flower(message, user, bot, helpers):
     if message.text in list(goods.flowers.keys()):
         if goods.flowers[message.text][1] * product <= user['balance']:
             user["what_flower"] = message.text
-            bot.send_message(user['id'], ('[{}]'.format(message.text) * user['width'] + "\n") * user['height'])
             user["plantf_time"] = time.time()
             user[goods.flowers[message.text][0]] = product
             user["balance"] -= (goods.flowers[message.text][1] * product)
@@ -42,6 +41,9 @@ def select_flower(message, user, bot, helpers):
                 user['growf_time'] *= 0.8
                 user['f_buster'] = False
             print(user["flowers_condition"])
+            msg = bot.send_message(user['id'], ('[.]' * user['width'] + "\n") * user['height'])
+            flowers_animation = Thread(target=animate_of_grow, args=(msg.message_id, user, bot))
+            flowers_animation.start()
             helpers.change_location(user, "flowers", bot, helpers)
         else:
             bot.send_message(user['id'], "У вас недосаточно деняк")
@@ -59,6 +61,11 @@ def animate(message_id, chat_id, bot, user):
         bot.edit_message_text("[ ]\n" * i + ("[" + user["what_flower"] + "] " + "\n") * (11 - i), chat_id, message_id)
     time.sleep(0.5)
 
+def animate_of_grow(message_id, user, bot):
+    time.sleep(user['grow_time'])
+    bot.edit_message_text(text=('[{}]'.format(user['what_flower']) * user['width'] + "\n") * user['height'],
+                          message_id=message_id, chat_id=user['id'])
+
 
 def start(message, user, bot):
     message = bot.send_message(message.chat.id, ("[", user["what_flower"] * user['width'] + "]\n") * user['height'])
@@ -67,7 +74,7 @@ def start(message, user, bot):
     t.start()
 
 
-def process_message(message, user, bot, helpers):
+def process_message(message, user, bot, helpers, users):
     print(message)
     buttons = ["🌻", "🌷", "☘", "🌹", "🌵", 'Назад']
     keyboard = helpers.generate_keyboard(buttons)

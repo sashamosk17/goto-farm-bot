@@ -9,7 +9,8 @@ def event(user, bot, helpers):
 
 
 def welcome(user, bot, helpers):
-    keyboard = helpers.generate_keyboard(['Посадить овощи', 'Собрать урожай', 'Проверить грядки', "Удобрить почву", 'Вернуться на ферму'])
+    keyboard = helpers.generate_keyboard(
+        ['Посадить овощи', 'Собрать урожай', 'Проверить грядки', "Удобрить почву", 'Вернуться на ферму'])
     bot.send_message(user['id'],
                      "Вы на огороде 🌽. У вас есть грядки ({}), на которых вы можете выращивать овощи."
                      " Покупать дополнительные грядки можно на площади.".format(user['height'] * user['width']),
@@ -55,15 +56,13 @@ def select_ovosh(message, user, bot, helpers):
     bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
 
 
-'''
-def animate_of_grow(message_id,chat_id,user,bot):
-    time.sleep(1)
-    #bot.edit_message_text(text='[.]\n' * 10, chat_id=user['id'], message_id=message_id)
-    #bot.edit_message_text('.\n' * 10, user['id'], message_id)
+def animate_of_grow(message_id, user, bot):
     time.sleep(user['grow_time'])
-    for i in range(10):
-        bot.edit_message_text(text='[' + user['what_plant'] + '\n', chat_id=user['id'], message_id=message_id)
-    del user['grow_time']
+    bot.edit_message_text(text=('[{}]'.format(user['what_plant']) * user['width'] + "\n") * user['height'],
+                          message_id=message_id, chat_id=user['id'])
+
+
+'''
 def start_grow(message, user, bot):
     message = bot.send_message(message.chat.id, ("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
     print(("[",user["what_plant"] * user['width'] +"]\n") * user['height'])
@@ -86,7 +85,7 @@ def start(message, user, bot):
     t.start()
 
 
-def process_message(message, user, bot, helpers):
+def process_message(message, user, bot, helpers, users):
     print(message)
     buttons = ["🥕", "🥔", "🍆", "🫑", "🌶", "🍄", 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
@@ -119,8 +118,9 @@ def process_message(message, user, bot, helpers):
                                "У вас {} баклажанов\n"
                                "У вас {} перчев\n"
                                "У вас {} горячих перцев\n"
-                               "У вас {} хрибов\n".format(user["carrot"], user["potato"], user["eggplant"], user["pepper"],
-                                                 user["pepper_hot"], user["mushrooms"]))
+                               "У вас {} хрибов\n".format(user["carrot"], user["potato"], user["eggplant"],
+                                                          user["pepper"],
+                                                          user["pepper_hot"], user["mushrooms"]))
 
     if message.text == 'Посадить овощи':
         if user["field_condition"] == 0:

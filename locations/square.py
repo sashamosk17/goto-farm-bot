@@ -1,7 +1,5 @@
 import random
-from random import randint
 from content.questions import questions
-import time
 
 
 def event(user, bot, helpers):
@@ -11,12 +9,36 @@ def event(user, bot, helpers):
 def welcome(user, bot, helpers):
     keyboard = helpers.generate_keyboard(['Тут проходит викторина',
                                           'Кто-то предлагает купить.. грядки? За 10 000 золотых он продаёт 10 грядок...',
+                                          'Топ игроков (по деньгхам)',
                                           'Вернуться на ферму'])
     bot.send_message(user['id'], "Вы на дееврейской площади. Тут довольно людно. Слышно, как поёт Ростислав.",
                      reply_markup=keyboard)
 
 
-def process_message(message, user, bot, helpers):
+def process_message(message, user, bot, helpers, users):
+    if message.text == 'Топ игроков (по деньгхам)':
+        n = 1
+        if len(list(users.keys())) >= n:
+            top_of_users = []
+            real_top_of_users = {}
+            for i in range(0, len(list(users.keys()))):
+                print(top_of_users)
+                top_of_users.append(users[list(users.keys())[i]]['balance'])
+                print(top_of_users)
+                top_of_users.sort()
+                top_of_users.reverse()
+                top_of_users = top_of_users
+                print(top_of_users)
+                for j in range(0, len(top_of_users)):
+                    for k in range(0, len(list(users.keys()))):
+                        if top_of_users[j] == users[list(users.keys())[k]]['balance']:
+                            real_top_of_users[users[list(users.keys())[k]]['farm_name']] = top_of_users[j]
+                            print(list(real_top_of_users.keys())[k])
+                            print(real_top_of_users[list(real_top_of_users.keys())[k]])
+                            bot.send_message(user['id'], str(k+1) + " " + str(list(real_top_of_users.keys())[k]) + " " + str(real_top_of_users[list(real_top_of_users.keys())[k]]))
+        else:
+            bot.send_message(user['id'], "В нашу игру ещё почти никто не играет🙁")
+
     if message.text == "Вернуться на ферму":
         helpers.change_location(user, "farm", bot, helpers)
         return

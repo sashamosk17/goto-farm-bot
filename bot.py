@@ -4,7 +4,6 @@ from config import TOKEN
 from telebot import TeleBot
 from threading import Thread
 import helpers
-from content import goods
 
 bot = TeleBot(TOKEN)
 
@@ -14,13 +13,14 @@ try:
 except:
     users = {}
 
-
+'''
 def background_events(users, bot, helpers):
     while True:
         for location in helpers.location_managers.values():
             for user in users:
                 location.event(user, bot, helpers)
         time.sleep(66666)
+'''
 
 
 @bot.message_handler(content_types='text')
@@ -94,13 +94,13 @@ def process(message):
     else:
         location = user['location']
         manager = helpers.location_managers[location]
-        manager.process_message(message, user, bot, helpers)
+        manager.process_message(message, user, bot, helpers, users)
 
     with open('storage.json', 'w') as file:
         json.dump(users, file)
 
 
-background_thread = Thread(target=background_events, args=(users, bot, helpers))
-background_thread.start()
+#background_thread = Thread(target=background_events, args=(users, bot, helpers))
+#background_thread.start()
 
 bot.polling(none_stop=True)
