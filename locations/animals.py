@@ -46,10 +46,13 @@ def welcome(user, bot, helpers):
 
 '''
 def process_message(message, user, bot, helpers, users):
-    buttons = ["🐓", "🐂", "🐄", "🐑", 'Вернуться на ферму']
+    buttons = ["🐓", "🦋", "🐄", "🐑", 'Вернуться на ферму', 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
     if message.text == "Вернуться на ферму":
         helpers.change_location(user, "farm", bot, helpers)
+        return
+    if message.text == "Назад":
+        helpers.change_location(user, "animals", bot, helpers)
         return
     user["field_animal"] = 0
     if message.text == "🐓":
@@ -65,13 +68,13 @@ def process_message(message, user, bot, helpers, users):
         user["feed_time"] = time.time()
         bot.send_message(user['id'], "Вы покормили животных")
         #ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
-    if (user["feed_time"] + user[goods.animals[message.text][3]])< time.time() + 60*60:
-        bot.send_message(user['id'], "Животные умерли😭")
+    if (user["feed_time"] + user[goods.animals[message.text][3]])< (user["feed_time"] + user[goods.animals[message.text][3]]) + 60*60:
+        bot.send_message(user['id'], "Животные умерли 😭")
         user["animal_condition"] = 0
-
     if message.text == 'Собрать ресурсы 🥛':
         bot.send_message(user['id'], "Вы собрали ресурсы с животных(??)")
-        bot.send_message(user['id'], "Вы получили {} {}".format(user["height"] * user["width"], user["what_product"]), reply_markup=keyboard)
+        bot.send_message(user['id'], "Вы получили {} {}".format(user["paddock"] , user["what_product"]),
+                         reply_markup=keyboard)
         user[goods.products['what_product'][0]] += user['paddock']
        # user["field_animal"] = 0 ИЛИ ДОПИСАТЬ ОБНОВЛЕНИЕ ВРЕМЕНИ
     if message.text == "Проверить загоны 🥅":

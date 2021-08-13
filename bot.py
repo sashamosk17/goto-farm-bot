@@ -7,15 +7,11 @@ import helpers
 
 bot = TeleBot(TOKEN)
 
-users = {}
-
-'''
 try:
     with open('storage.json', 'r') as file:
         users = json.load(file)
 except:
-    pass
-'''
+    users = {}
 
 
 def background_events(users, bot, helpers):
@@ -78,6 +74,10 @@ def process(message):
         users[user_id]['animal_farming_time'] = False
         users[user_id]['magic_grib'] = 1
         bot.send_message(user_id, "Привет, " + str(message.from_user.username) + "! Укажи название фермы.")
+
+        with open('storage.json', 'w') as file:
+            json.dump(users, file)
+
         return
 
     user = users[user_id]
