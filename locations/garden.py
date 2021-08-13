@@ -19,7 +19,7 @@ def welcome(user, bot, helpers):
     hour = current_time.hour
 
 
-def select_ovosh(message, user, bot, helpers):
+def select_ovosh(message, user, bot, helpers, users):
     buttons = ['Вернуться на ферму', 'Назад']
     keyboard = helpers.generate_keyboard(buttons)
     product = user["height"] * user["width"]
@@ -53,7 +53,7 @@ def select_ovosh(message, user, bot, helpers):
             bot.send_message(user['id'], "У вас недосаточно деняк")
     else:
         bot.send_message(user['id'], "Эт не оващ")
-    bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers))
+    bot.register_next_step_handler(message, lambda x: process_message(x, user, bot, helpers, users))
 
 
 def animate_of_grow(message_id, user, bot):
@@ -124,7 +124,7 @@ def process_message(message, user, bot, helpers, users):
 
     if message.text == 'Посадить овощи':
         bot.send_message(user['id'], "Выберите овощ", reply_markup=keyboard)
-        bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers))
+        bot.register_next_step_handler(message, lambda x: select_ovosh(x, user, bot, helpers, users))
     if message.text == 'Собрать урожай':
         if (time.time() > user["plant_time"] + user["grow_time"] + 60 * 60):
             bot.send_message(user['id'], "Овощи сгнили")

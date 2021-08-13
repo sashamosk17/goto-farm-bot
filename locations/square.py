@@ -35,7 +35,7 @@ def process_message(message, user, bot, helpers, users):
                             real_top_of_users[users[list(users.keys())[k]]['farm_name']] = top_of_users[j]
                             print(list(real_top_of_users.keys())[k])
                             print(real_top_of_users[list(real_top_of_users.keys())[k]])
-                            bot.send_message(user['id'], str(k+1) + " " + str(list(real_top_of_users.keys())[k]) + " " + str(real_top_of_users[list(real_top_of_users.keys())[k]]))
+                            bot.send_message(user['id'], str(k+1) + " место: " + str(list(real_top_of_users.keys())[k]) + " " + str(real_top_of_users[list(real_top_of_users.keys())[k]]))
         else:
             bot.send_message(user['id'], "В нашу игру ещё почти никто не играет🙁")
 
