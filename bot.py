@@ -14,6 +14,7 @@ except:
     users = {}
 
 
+
 def background_events(users, bot, helpers):
     while True:
         for location in helpers.location_managers.values():

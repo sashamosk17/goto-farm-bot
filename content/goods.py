@@ -27,7 +27,11 @@ animals_2 = {
 }
 
 super = {
-
+    "sunflower": "🌻",
+    "tulip": "🌷",
+    "clover": "☘",
+    "rose": "🌹",
+    "cactus": "🌵"
 }
 
 products = {
